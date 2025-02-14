@@ -1,6 +1,12 @@
-use weekend_ray_tracing::add;
-
 fn main() {
-    let result = add(1, 2);
-    println!("1 + 2 = {}", result);
+    let width = 256;
+    let height = 256;
+    println!("P3");
+    println!("{} {}", width, height);
+    println!("255");
+    for x in 0..width {
+        for y in 0..height {
+            println!("{} {} {}", x, y, 128);
+        }
+    }
 }
