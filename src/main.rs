@@ -14,9 +14,9 @@ fn main() {
     writeln!(file, "{} {}", width, height).unwrap();
     writeln!(file, "255").unwrap();
 
-    (0..width)
-        .cartesian_product(0..height)
+    (0..height)
+        .cartesian_product(0..width)
         .progress_count(width * height)
-        .map(|(x, y)| Color::new(x as f64 / width as f64, y as f64 / height as f64, 0.5).unwrap())
+        .map(|(y, x)| Color::new(x as f64 / width as f64, y as f64 / height as f64, 0.5).unwrap())
         .for_each(|color| writeln!(file, "{}", color).unwrap());
 }
