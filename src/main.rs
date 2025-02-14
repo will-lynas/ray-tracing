@@ -6,8 +6,9 @@ use std::io::Write;
 use weekend_ray_tracing::color::Color;
 
 fn main() {
-    let width = 256;
-    let height = 256;
+    let aspect_ratio = 16.0 / 9.0;
+    let width = 400;
+    let height = (width as f64 / aspect_ratio) as u64;
     let mut file = File::create("out.ppm").unwrap();
 
     writeln!(file, "P3").unwrap();
