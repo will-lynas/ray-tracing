@@ -11,6 +11,25 @@ impl Color {
         ((0.0..=1.0).contains(&r) && (0.0..=1.0).contains(&g) && (0.0..=1.0).contains(&b))
             .then_some(Self { r, g, b })
     }
+
+    pub fn white() -> Self {
+        Self::new(1.0, 1.0, 1.0).unwrap()
+    }
+
+    pub fn blue() -> Self {
+        Self::new(0.0, 0.0, 1.0).unwrap()
+    }
+
+    pub fn lerp(&self, other: &Self, t: f64) -> Option<Self> {
+        (0.0..=1.0).contains(&t).then_some(
+            Self::new(
+                (1.0 - t) * self.r + t * other.r,
+                (1.0 - t) * self.g + t * other.g,
+                (1.0 - t) * self.b + t * other.b,
+            )
+            .unwrap(),
+        )
+    }
 }
 
 impl Display for Color {

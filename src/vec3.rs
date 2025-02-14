@@ -2,7 +2,7 @@ use std::ops::{Add, Div, Mul, Sub};
 
 pub const ORIGIN: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,
@@ -12,6 +12,18 @@ pub struct Vec3 {
 impl Vec3 {
     pub const fn new(x: f64, y: f64, z: f64) -> Self {
         Self { x, y, z }
+    }
+
+    pub fn length_squared(&self) -> f64 {
+        self.x * self.x + self.y * self.y + self.z * self.z
+    }
+
+    pub fn length(&self) -> f64 {
+        self.length_squared().sqrt()
+    }
+
+    pub fn unit_vector(&self) -> Self {
+        *self / self.length()
     }
 }
 

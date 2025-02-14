@@ -12,6 +12,8 @@ impl Ray {
     }
 
     pub fn color(&self) -> Color {
-        Color::new(0.9, 0.1, 0.9).unwrap()
+        let unit_direction = self.direction.unit_vector();
+        let t = 0.5 * (unit_direction.y + 1.0);
+        Color::white().lerp(&Color::blue(), t).unwrap()
     }
 }
