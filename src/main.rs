@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use std::fs::File;
 use std::io::Write;
 
@@ -10,9 +11,7 @@ fn main() {
     writeln!(file, "{} {}", width, height).unwrap();
     writeln!(file, "255").unwrap();
 
-    for x in 0..width {
-        for y in 0..height {
-            writeln!(file, "{} {} {}", x, y, 128).unwrap();
-        }
-    }
+    (0..width)
+        .cartesian_product(0..height)
+        .for_each(|(x, y)| writeln!(file, "{} {} {}", x, y, 128).unwrap());
 }
