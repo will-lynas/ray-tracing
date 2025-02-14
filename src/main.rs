@@ -3,6 +3,8 @@ use itertools::Itertools;
 use std::fs::File;
 use std::io::Write;
 
+use weekend_ray_tracing::color::Color;
+
 fn main() {
     let width = 256;
     let height = 256;
@@ -15,5 +17,6 @@ fn main() {
     (0..width)
         .cartesian_product(0..height)
         .progress_count(width * height)
-        .for_each(|(x, y)| writeln!(file, "{} {} {}", x, y, 128).unwrap());
+        .map(|(x, y)| Color::new(x as f64 / width as f64, y as f64 / height as f64, 0.5).unwrap())
+        .for_each(|color| writeln!(file, "{}", color).unwrap());
 }
