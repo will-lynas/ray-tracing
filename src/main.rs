@@ -1,3 +1,4 @@
+use indicatif::ProgressIterator;
 use itertools::Itertools;
 use std::fs::File;
 use std::io::Write;
@@ -13,5 +14,6 @@ fn main() {
 
     (0..width)
         .cartesian_product(0..height)
+        .progress_count(width * height)
         .for_each(|(x, y)| writeln!(file, "{} {} {}", x, y, 128).unwrap());
 }
