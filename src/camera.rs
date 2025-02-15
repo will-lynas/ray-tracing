@@ -10,6 +10,11 @@ use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::time::Instant;
 
+pub enum DiffuseMethod {
+    Lambertian,
+    Uniform,
+}
+
 pub struct Camera {
     world: World,
     width: u64,
@@ -20,6 +25,7 @@ pub struct Camera {
     pixel_delta_v: Vec3,
     samples_per_pixel: u64,
     max_depth: u64,
+    diffuse_method: DiffuseMethod,
 }
 
 impl Camera {
@@ -75,11 +81,18 @@ impl Camera {
 
         let interval = 0.001..f64::MAX;
         if let Some(hit_record) = self.world.hit(r, &interval) {
-            let dir = hit_record.normal.random_in_hemisphere();
+            let dir = self.new_direction(hit_record.normal);
             let ray = Ray::new(hit_record.point, dir);
             self.color(&ray, depth - 1).mul(0.5).unwrap()
         } else {
             Self::background(r)
+        }
+    }
+
+    fn new_direction(&self, dir: Vec3) -> Vec3 {
+        match self.diffuse_method {
+            DiffuseMethod::Lambertian => dir + Vec3::random_unit_vector(),
+            DiffuseMethod::Uniform => dir.random_in_hemisphere(),
         }
     }
 
@@ -99,6 +112,7 @@ pub struct CameraBuilder {
     camera_center: Vec3,
     samples_per_pixel: u64,
     max_depth: u64,
+    diffuse_method: DiffuseMethod,
 }
 
 impl CameraBuilder {
@@ -112,7 +126,13 @@ impl CameraBuilder {
             camera_center: vec3::ORIGIN,
             samples_per_pixel: 10,
             max_depth: 50,
+            diffuse_method: DiffuseMethod::Lambertian,
         }
+    }
+
+    pub fn diffuse_method(mut self, diffuse_method: DiffuseMethod) -> Self {
+        self.diffuse_method = diffuse_method;
+        self
     }
 
     pub fn samples_per_pixel(mut self, samples_per_pixel: u64) -> Self {
@@ -176,6 +196,7 @@ impl CameraBuilder {
             pixel_delta_v,
             samples_per_pixel: self.samples_per_pixel,
             max_depth: self.max_depth,
+            diffuse_method: self.diffuse_method,
         }
     }
 }
