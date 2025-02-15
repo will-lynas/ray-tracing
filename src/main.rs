@@ -12,6 +12,6 @@ fn main() {
         Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).unwrap(),
     ));
 
-    let camera = Camera::new(world);
-    camera.render("out.ppm");
+    let camera = Camera::new(world, 400, 16.0 / 9.0);
+    camera.render_to_file("out.ppm");
 }
