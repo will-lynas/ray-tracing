@@ -1,6 +1,7 @@
 use crate::color::Color;
 use crate::hittable::{HitRecord, Hittable};
 use crate::ray::Ray;
+use std::ops::Range;
 
 #[derive(Default)]
 pub struct World {
@@ -8,13 +9,13 @@ pub struct World {
 }
 
 impl World {
-    pub fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
+    pub fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord> {
         let mut hit_record = None;
-        let mut closest_so_far = t_max;
+        let mut check_interval = interval.clone();
 
         for object in self.objects.iter() {
-            if let Some(temp_record) = object.hit(r, t_min, closest_so_far) {
-                closest_so_far = temp_record.t;
+            if let Some(temp_record) = object.hit(r, &check_interval) {
+                check_interval = check_interval.start..temp_record.t;
                 hit_record = Some(temp_record);
             }
         }
@@ -23,7 +24,8 @@ impl World {
     }
 
     pub fn color(&self, r: &Ray) -> Color {
-        if let Some(hit_record) = self.hit(r, 0.0, f64::MAX) {
+        let interval = 0.0..f64::MAX;
+        if let Some(hit_record) = self.hit(r, &interval) {
             Color::from_unit_vector(hit_record.normal).unwrap()
         } else {
             self.background(r)
