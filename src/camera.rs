@@ -108,7 +108,7 @@ impl CameraBuilder {
             viewport_height: 2.0,
             focal_length: 1.0,
             camera_center: vec3::ORIGIN,
-            samples_per_pixel: 10,
+            samples_per_pixel: 100,
             max_depth: 50,
         }
     }
