@@ -19,6 +19,7 @@ pub struct Camera {
     pixel_delta_u: Vec3,
     pixel_delta_v: Vec3,
     samples_per_pixel: u64,
+    max_depth: u64,
 }
 
 impl Camera {
@@ -49,7 +50,7 @@ impl Camera {
                 for _ in 0..self.samples_per_pixel {
                     let ray_direction = self.sample_location(x, y) - self.camera_center;
                     let ray = Ray::new(self.camera_center, ray_direction);
-                    samples.push(self.color(&ray));
+                    samples.push(self.color(&ray, self.max_depth));
                 }
                 Color::average(&samples).unwrap()
             })
@@ -67,12 +68,16 @@ impl Camera {
             + (self.pixel_delta_v * (y as f64 + rand_y))
     }
 
-    pub fn color(&self, r: &Ray) -> Color {
+    pub fn color(&self, r: &Ray, depth: u64) -> Color {
+        if depth == 0 {
+            return Color::black();
+        }
+
         let interval = 0.0..f64::MAX;
         if let Some(hit_record) = self.world.hit(r, &interval) {
             let dir = hit_record.normal.random_in_hemisphere();
             let ray = Ray::new(hit_record.point, dir);
-            self.color(&ray).mul(0.5).unwrap()
+            self.color(&ray, depth - 1).mul(0.5).unwrap()
         } else {
             Self::background(r)
         }
@@ -93,6 +98,7 @@ pub struct CameraBuilder {
     focal_length: f64,
     camera_center: Vec3,
     samples_per_pixel: u64,
+    max_depth: u64,
 }
 
 impl CameraBuilder {
@@ -105,11 +111,17 @@ impl CameraBuilder {
             focal_length: 1.0,
             camera_center: vec3::ORIGIN,
             samples_per_pixel: 10,
+            max_depth: 50,
         }
     }
 
     pub fn samples_per_pixel(mut self, samples_per_pixel: u64) -> Self {
         self.samples_per_pixel = samples_per_pixel;
+        self
+    }
+
+    pub fn max_depth(mut self, max_depth: u64) -> Self {
+        self.max_depth = max_depth;
         self
     }
 
@@ -163,6 +175,7 @@ impl CameraBuilder {
             pixel_delta_u,
             pixel_delta_v,
             samples_per_pixel: self.samples_per_pixel,
+            max_depth: self.max_depth,
         }
     }
 }

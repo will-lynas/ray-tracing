@@ -17,6 +17,10 @@ impl Color {
         Self::new(1.0, 1.0, 1.0).unwrap()
     }
 
+    pub fn black() -> Self {
+        Self::new(0.0, 0.0, 0.0).unwrap()
+    }
+
     pub fn blue() -> Self {
         Self::new(0.0, 0.0, 1.0).unwrap()
     }
