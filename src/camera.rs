@@ -6,7 +6,7 @@ use crate::world::World;
 use indicatif::ProgressIterator;
 use itertools::Itertools;
 use std::fs::File;
-use std::io::Write;
+use std::io::{BufWriter, Write};
 
 pub struct Camera {
     world: World,
@@ -27,13 +27,15 @@ impl Camera {
     pub fn render_to_file(&self, file_name: &str) {
         let colors = self.render();
 
-        let mut file = File::create(file_name).unwrap();
-        writeln!(file, "P3").unwrap();
-        writeln!(file, "{} {}", self.width, self.height).unwrap();
-        writeln!(file, "255").unwrap();
+        let file = File::create(file_name).unwrap();
+        let mut writer = BufWriter::new(file);
+
+        writeln!(writer, "P3").unwrap();
+        writeln!(writer, "{} {}", self.width, self.height).unwrap();
+        writeln!(writer, "255").unwrap();
 
         colors.into_iter().for_each(|color| {
-            writeln!(file, "{}", color).unwrap();
+            writeln!(writer, "{}", color).unwrap();
         });
     }
 
