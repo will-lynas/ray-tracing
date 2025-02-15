@@ -73,7 +73,7 @@ impl Camera {
             return Color::black();
         }
 
-        let interval = 0.0..f64::MAX;
+        let interval = 0.001..f64::MAX;
         if let Some(hit_record) = self.world.hit(r, &interval) {
             let dir = hit_record.normal.random_in_hemisphere();
             let ray = Ray::new(hit_record.point, dir);
