@@ -57,6 +57,7 @@ impl Color {
             .contains(&s)
             .then_some(Self::new(self.r * s, self.g * s, self.b * s).unwrap())
     }
+
     pub fn from_unit_vector(n: Vec3) -> Option<Self> {
         Self::new(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0))
     }
@@ -64,12 +65,9 @@ impl Color {
 
 impl Display for Color {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {} {}",
-            self.r * 255.999,
-            self.g * 255.999,
-            self.b * 255.999
-        )
+        let r = (self.r.sqrt() * 255.999) as u8;
+        let g = (self.g.sqrt() * 255.999) as u8;
+        let b = (self.b.sqrt() * 255.999) as u8;
+        write!(f, "{} {} {}", r, g, b)
     }
 }
