@@ -24,3 +24,21 @@ impl Material {
         }
     }
 }
+
+impl From<Lambertian> for Material {
+    fn from(lambertian: Lambertian) -> Self {
+        Self::Lambertian(lambertian)
+    }
+}
+
+impl From<Uniform> for Material {
+    fn from(uniform: Uniform) -> Self {
+        Self::Uniform(uniform)
+    }
+}
+
+impl From<Metal> for Material {
+    fn from(metal: Metal) -> Self {
+        Self::Metal(metal)
+    }
+}

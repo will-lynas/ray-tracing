@@ -9,6 +9,15 @@ pub struct Object {
     pub material: Material,
 }
 
+impl Object {
+    pub fn new(hittable: impl Into<Hittable>, material: impl Into<Material>) -> Self {
+        Self {
+            hittable: hittable.into(),
+            material: material.into(),
+        }
+    }
+}
+
 #[derive(Default)]
 pub struct World {
     pub objects: Vec<Object>,

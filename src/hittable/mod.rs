@@ -33,3 +33,9 @@ impl Hittable {
         }
     }
 }
+
+impl From<Sphere> for Hittable {
+    fn from(sphere: Sphere) -> Self {
+        Self::Sphere(sphere)
+    }
+}
