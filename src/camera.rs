@@ -7,6 +7,7 @@ use indicatif::ProgressIterator;
 use itertools::Itertools;
 use std::fs::File;
 use std::io::{BufWriter, Write};
+use std::time::Instant;
 
 pub struct Camera {
     world: World,
@@ -68,7 +69,8 @@ impl Camera {
 
     pub fn render(&self) -> Vec<Color> {
         println!("Rendering...");
-        (0..self.height)
+        let start = Instant::now();
+        let colors = (0..self.height)
             .cartesian_product(0..self.width)
             .progress_count(self.width * self.height)
             .map(|(y, x)| {
@@ -79,7 +81,9 @@ impl Camera {
                 let ray = Ray::new(self.camera_center, ray_direction);
                 self.color(&ray)
             })
-            .collect()
+            .collect();
+        println!("  Done in {:?}", start.elapsed());
+        colors
     }
 
     pub fn color(&self, r: &Ray) -> Color {
