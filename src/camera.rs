@@ -5,6 +5,7 @@ use crate::vec3::Vec3;
 use crate::world::World;
 use indicatif::ProgressIterator;
 use itertools::Itertools;
+use rand::Rng;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::time::Instant;
@@ -46,10 +47,7 @@ impl Camera {
             .map(|(y, x)| {
                 let mut samples = Vec::new();
                 for _ in 0..self.samples_per_pixel {
-                    let pixel_center = self.pixel00_loc
-                        + (self.pixel_delta_u * x as f64)
-                        + (self.pixel_delta_v * y as f64);
-                    let ray_direction = pixel_center - self.camera_center;
+                    let ray_direction = self.sample_location(x, y) - self.camera_center;
                     let ray = Ray::new(self.camera_center, ray_direction);
                     samples.push(self.color(&ray));
                 }
@@ -58,6 +56,15 @@ impl Camera {
             .collect();
         println!("  Done in {:?}", start.elapsed());
         colors
+    }
+
+    fn sample_location(&self, x: u64, y: u64) -> Vec3 {
+        let mut rng = rand::rng();
+        let rand_x = rng.random::<f64>() - 0.5;
+        let rand_y = rng.random::<f64>() - 0.5;
+        self.pixel00_loc
+            + (self.pixel_delta_u * (x as f64 + rand_x))
+            + (self.pixel_delta_v * (y as f64 + rand_y))
     }
 
     pub fn color(&self, r: &Ray) -> Color {
