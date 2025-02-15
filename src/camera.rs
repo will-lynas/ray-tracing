@@ -27,6 +27,7 @@ impl Camera {
     pub fn render_to_file(&self, file_name: &str) {
         let colors = self.render();
 
+        println!("Writing to file...");
         let file = File::create(file_name).unwrap();
         let mut writer = BufWriter::new(file);
 
@@ -34,12 +35,13 @@ impl Camera {
         writeln!(writer, "{} {}", self.width, self.height).unwrap();
         writeln!(writer, "255").unwrap();
 
-        colors.into_iter().for_each(|color| {
+        colors.into_iter().progress().for_each(|color| {
             writeln!(writer, "{}", color).unwrap();
         });
     }
 
     pub fn render(&self) -> Vec<Color> {
+        println!("Rendering...");
         let focal_length = 1.0;
         let viewport_height = 2.0;
         let viewport_width = viewport_height * (self.width as f64 / self.height as f64);
