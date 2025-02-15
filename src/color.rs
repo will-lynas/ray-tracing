@@ -20,6 +20,10 @@ impl Color {
         Self::new(0.0, 0.0, 1.0).unwrap()
     }
 
+    pub fn green() -> Self {
+        Self::new(0.0, 1.0, 0.0).unwrap()
+    }
+
     pub fn lerp(&self, other: &Self, t: f64) -> Option<Self> {
         (0.0..=1.0).contains(&t).then_some(
             Self::new(
