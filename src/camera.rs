@@ -18,39 +18,7 @@ pub struct Camera {
     pixel_delta_u: Vec3,
     pixel_delta_v: Vec3,
 }
-
 impl Camera {
-    pub fn new(world: World, width: u64, aspect_ratio: f64) -> Self {
-        let height = (width as f64 / aspect_ratio) as u64;
-
-        let viewport_height = 2.0;
-        let viewport_width = viewport_height * (width as f64 / height as f64);
-
-        let focal_length = 1.0;
-        let camera_center = vec3::ORIGIN;
-
-        let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);
-        let viewport_v = Vec3::new(0.0, -viewport_height, 0.0);
-
-        let pixel_delta_u = viewport_u / width as f64;
-        let pixel_delta_v = viewport_v / height as f64;
-
-        let viewport_upper_left =
-            camera_center - Vec3::new(0.0, 0.0, focal_length) - (viewport_u + viewport_v) * 0.5;
-
-        let pixel00_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
-
-        Self {
-            world,
-            width,
-            height,
-            camera_center,
-            pixel00_loc,
-            pixel_delta_u,
-            pixel_delta_v,
-        }
-    }
-
     pub fn render_to_file(&self, file_name: &str) {
         let colors = self.render();
 
@@ -99,5 +67,79 @@ impl Camera {
         let unit_direction = r.direction.unit_vector();
         let t = 0.5 * (unit_direction.y + 1.0);
         Color::white().lerp(&Color::blue(), t).unwrap()
+    }
+}
+
+pub struct CameraBuilder {
+    world: World,
+    width: u64,
+    aspect_ratio: f64,
+    viewport_height: f64,
+    focal_length: f64,
+    camera_center: Vec3,
+}
+
+impl CameraBuilder {
+    pub fn new(world: World) -> Self {
+        Self {
+            world,
+            width: 400,
+            aspect_ratio: 16.0 / 9.0,
+            viewport_height: 2.0,
+            focal_length: 1.0,
+            camera_center: vec3::ORIGIN,
+        }
+    }
+
+    pub fn width(mut self, width: u64) -> Self {
+        self.width = width;
+        self
+    }
+
+    pub fn aspect_ratio(mut self, aspect_ratio: f64) -> Self {
+        self.aspect_ratio = aspect_ratio;
+        self
+    }
+
+    pub fn viewport_height(mut self, viewport_height: f64) -> Self {
+        self.viewport_height = viewport_height;
+        self
+    }
+
+    pub fn focal_length(mut self, focal_length: f64) -> Self {
+        self.focal_length = focal_length;
+        self
+    }
+
+    pub fn camera_center(mut self, camera_center: Vec3) -> Self {
+        self.camera_center = camera_center;
+        self
+    }
+
+    pub fn build(self) -> Camera {
+        let height = (self.width as f64 / self.aspect_ratio) as u64;
+        let viewport_width = self.viewport_height * (self.width as f64 / height as f64);
+
+        let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);
+        let viewport_v = Vec3::new(0.0, -self.viewport_height, 0.0);
+
+        let pixel_delta_u = viewport_u / self.width as f64;
+        let pixel_delta_v = viewport_v / height as f64;
+
+        let viewport_upper_left = self.camera_center
+            - Vec3::new(0.0, 0.0, self.focal_length)
+            - (viewport_u + viewport_v) * 0.5;
+
+        let pixel00_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
+
+        Camera {
+            world: self.world,
+            width: self.width,
+            height,
+            camera_center: self.camera_center,
+            pixel00_loc,
+            pixel_delta_u,
+            pixel_delta_v,
+        }
     }
 }
