@@ -117,14 +117,20 @@ impl Builder {
     pub fn new(world: World) -> Self {
         Self {
             world,
-            width: 400,
+            width: 2000,
             aspect_ratio: 16.0 / 9.0,
             viewport_height: 2.0,
             focal_length: 1.0,
             camera_center: vec3::ORIGIN,
             samples_per_pixel: 100,
-            max_depth: 50,
+            max_depth: 100,
         }
+    }
+
+    pub fn draft(mut self) -> Self {
+        self.width = 400;
+        self.max_depth = 50;
+        self
     }
 
     pub fn samples_per_pixel(mut self, samples_per_pixel: u64) -> Self {

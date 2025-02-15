@@ -27,7 +27,7 @@ fn main() {
 
     world.objects.push(sphere);
     world.objects.push(ground);
-    let camera = Builder::new(world).build();
 
+    let camera = Builder::new(world).draft().build();
     camera.render_to_file("out.ppm");
 }

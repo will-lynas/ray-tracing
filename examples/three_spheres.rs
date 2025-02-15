@@ -42,11 +42,6 @@ fn main() {
     world.objects.push(left);
     world.objects.push(right);
 
-    let camera = Builder::new(world)
-        .width(1000)
-        .samples_per_pixel(100)
-        .max_depth(100)
-        .build();
-
+    let camera = Builder::new(world).build();
     camera.render_to_file("out.ppm");
 }
