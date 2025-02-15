@@ -1,3 +1,4 @@
+use crate::color::Color;
 use crate::ray::Ray;
 use crate::vec3;
 use crate::vec3::Vec3;
@@ -7,10 +8,16 @@ use itertools::Itertools;
 use std::fs::File;
 use std::io::Write;
 
-pub struct Camera;
+pub struct Camera {
+    world: World,
+}
 
 impl Camera {
-    pub fn render(&self, world: &World, file_name: &str) {
+    pub fn new(world: World) -> Self {
+        Self { world }
+    }
+
+    pub fn render(&self, file_name: &str) {
         let aspect_ratio = 16.0 / 9.0;
         let width = 400;
         let height = (width as f64 / aspect_ratio) as u64;
@@ -44,8 +51,23 @@ impl Camera {
                     pixel00_loc + (pixel_delta_u * x as f64) + (pixel_delta_v * y as f64);
                 let ray_direction = pixel_center - camera_center;
                 let ray = Ray::new(camera_center, ray_direction);
-                world.color(&ray)
+                self.color(&ray)
             })
             .for_each(|color| writeln!(file, "{}", color).unwrap());
+    }
+
+    pub fn color(&self, r: &Ray) -> Color {
+        let interval = 0.0..f64::MAX;
+        if let Some(hit_record) = self.world.hit(r, &interval) {
+            Color::from_unit_vector(hit_record.normal).unwrap()
+        } else {
+            Self::background(r)
+        }
+    }
+
+    pub fn background(r: &Ray) -> Color {
+        let unit_direction = r.direction.unit_vector();
+        let t = 0.5 * (unit_direction.y + 1.0);
+        Color::white().lerp(&Color::blue(), t).unwrap()
     }
 }

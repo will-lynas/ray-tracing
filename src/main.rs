@@ -1,3 +1,4 @@
+use weekend_ray_tracing::camera::Camera;
 use weekend_ray_tracing::sphere::Sphere;
 use weekend_ray_tracing::vec3::Vec3;
 use weekend_ray_tracing::world::World;
@@ -10,4 +11,7 @@ fn main() {
     world.objects.push(Box::new(
         Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).unwrap(),
     ));
+
+    let camera = Camera::new(world);
+    camera.render("out.ppm");
 }
