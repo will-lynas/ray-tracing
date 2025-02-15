@@ -1,4 +1,10 @@
-use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::ops::{
+    Add,
+    Div,
+    Mul,
+    Neg,
+    Sub,
+};
 
 use rand::Rng;
 

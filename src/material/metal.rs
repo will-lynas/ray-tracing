@@ -1,4 +1,8 @@
-use crate::{color::Color, hittable::HitRecord, ray::Ray};
+use crate::{
+    color::Color,
+    hittable::HitRecord,
+    ray::Ray,
+};
 
 #[derive(Clone, Copy)]
 pub struct Metal {

@@ -1,7 +1,10 @@
-use crate::hittable::HitRecord;
-use crate::ray::Ray;
-use crate::vec3::Vec3;
 use std::ops::Range;
+
+use crate::{
+    hittable::HitRecord,
+    ray::Ray,
+    vec3::Vec3,
+};
 
 pub struct Sphere {
     center: Vec3,

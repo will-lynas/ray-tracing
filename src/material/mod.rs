@@ -6,7 +6,11 @@ pub use lambertian::Lambertian;
 pub use metal::Metal;
 pub use uniform::Uniform;
 
-use crate::{color::Color, hittable::HitRecord, ray::Ray};
+use crate::{
+    color::Color,
+    hittable::HitRecord,
+    ray::Ray,
+};
 
 #[derive(Clone, Copy)]
 pub enum Material {

@@ -1,9 +1,17 @@
-use weekend_ray_tracing::camera::Builder;
-use weekend_ray_tracing::color::Color;
-use weekend_ray_tracing::hittable::Sphere;
-use weekend_ray_tracing::material::{Lambertian, Metal};
-use weekend_ray_tracing::vec3::Vec3;
-use weekend_ray_tracing::world::{Object, World};
+use weekend_ray_tracing::{
+    camera::Builder,
+    color::Color,
+    hittable::Sphere,
+    material::{
+        Lambertian,
+        Metal,
+    },
+    vec3::Vec3,
+    world::{
+        Object,
+        World,
+    },
+};
 
 fn main() {
     let mut world = World::default();

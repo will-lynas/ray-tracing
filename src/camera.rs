@@ -1,14 +1,28 @@
-use crate::color::{Color, BLACK, BLUE, WHITE};
-use crate::ray::Ray;
-use crate::vec3;
-use crate::vec3::Vec3;
-use crate::world::World;
+use std::{
+    fs::File,
+    io::{
+        BufWriter,
+        Write,
+    },
+    time::Instant,
+};
+
 use indicatif::ProgressIterator;
 use itertools::Itertools;
 use rand::Rng;
-use std::fs::File;
-use std::io::{BufWriter, Write};
-use std::time::Instant;
+
+use crate::{
+    color::{
+        Color,
+        BLACK,
+        BLUE,
+        WHITE,
+    },
+    ray::Ray,
+    vec3,
+    vec3::Vec3,
+    world::World,
+};
 
 pub struct Camera {
     world: World,

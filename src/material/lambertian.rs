@@ -1,4 +1,9 @@
-use crate::{color::Color, hittable::HitRecord, ray::Ray, vec3::Vec3};
+use crate::{
+    color::Color,
+    hittable::HitRecord,
+    ray::Ray,
+    vec3::Vec3,
+};
 
 #[derive(Clone, Copy)]
 pub struct Lambertian {

@@ -1,8 +1,14 @@
-use crate::color::Color;
-use crate::hittable::{HitRecord, Hittable};
-use crate::material::Material;
-use crate::ray::Ray;
 use std::ops::Range;
+
+use crate::{
+    color::Color,
+    hittable::{
+        HitRecord,
+        Hittable,
+    },
+    material::Material,
+    ray::Ray,
+};
 
 pub struct Object {
     pub hittable: Hittable,

@@ -1,7 +1,9 @@
 use std::ops::Range;
 
-use crate::ray::Ray;
-use crate::vec3::Vec3;
+use crate::{
+    ray::Ray,
+    vec3::Vec3,
+};
 
 mod sphere;
 pub use sphere::Sphere;
