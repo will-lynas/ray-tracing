@@ -30,7 +30,11 @@ fn main() {
     world.objects.push(left);
     world.objects.push(right);
 
-    let camera = CameraBuilder::new(world).build();
+    let camera = CameraBuilder::new(world)
+        .width(1000)
+        .samples_per_pixel(100)
+        .max_depth(100)
+        .build();
 
     camera.render_to_file("out.ppm");
 }
