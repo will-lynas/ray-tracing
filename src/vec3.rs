@@ -31,9 +31,9 @@ impl Vec3 {
     pub fn random() -> Self {
         let mut rng = rand::rng();
         Self {
-            x: rng.random::<f64>(),
-            y: rng.random::<f64>(),
-            z: rng.random::<f64>(),
+            x: rng.random_range(-1.0..=1.0),
+            y: rng.random_range(-1.0..=1.0),
+            z: rng.random_range(-1.0..=1.0),
         }
     }
 
