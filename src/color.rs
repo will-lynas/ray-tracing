@@ -54,6 +54,11 @@ impl Color {
         )
     }
 
+    pub fn mul(&self, s: f64) -> Option<Self> {
+        (0.0..=1.0)
+            .contains(&s)
+            .then_some(Self::new(self.r * s, self.g * s, self.b * s).unwrap())
+    }
     pub fn from_unit_vector(n: Vec3) -> Option<Self> {
         Self::new(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0))
     }

@@ -70,7 +70,9 @@ impl Camera {
     pub fn color(&self, r: &Ray) -> Color {
         let interval = 0.0..f64::MAX;
         if let Some(hit_record) = self.world.hit(r, &interval) {
-            Color::from_unit_vector(hit_record.normal).unwrap()
+            let dir = hit_record.normal.random_in_hemisphere();
+            let ray = Ray::new(hit_record.point, dir);
+            self.color(&ray).mul(0.5).unwrap()
         } else {
             Self::background(r)
         }

@@ -1,5 +1,7 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
+use rand::Rng;
+
 pub const ORIGIN: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 
 #[derive(Clone, Copy, Debug)]
@@ -24,6 +26,33 @@ impl Vec3 {
 
     pub fn unit_vector(&self) -> Self {
         *self / self.length()
+    }
+
+    pub fn random() -> Self {
+        let mut rng = rand::rng();
+        Self {
+            x: rng.random::<f64>(),
+            y: rng.random::<f64>(),
+            z: rng.random::<f64>(),
+        }
+    }
+
+    pub fn random_unit_vector() -> Self {
+        loop {
+            let v = Self::random();
+            if (1e-160..=1.0).contains(&v.length_squared()) {
+                return v.unit_vector();
+            }
+        }
+    }
+
+    pub fn random_in_hemisphere(&self) -> Self {
+        let v = Self::random_unit_vector();
+        if self.dot(&v) > 0.0 {
+            v
+        } else {
+            -v
+        }
     }
 
     pub fn dot(&self, other: &Self) -> f64 {
