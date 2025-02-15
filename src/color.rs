@@ -36,6 +36,24 @@ impl Color {
         )
     }
 
+    pub fn average(colors: &[Self]) -> Option<Self> {
+        let mut r = 0.0;
+        let mut g = 0.0;
+        let mut b = 0.0;
+
+        for color in colors {
+            r += color.r;
+            g += color.g;
+            b += color.b;
+        }
+
+        Self::new(
+            r / colors.len() as f64,
+            g / colors.len() as f64,
+            b / colors.len() as f64,
+        )
+    }
+
     pub fn from_unit_vector(n: Vec3) -> Option<Self> {
         Self::new(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0))
     }

@@ -17,7 +17,9 @@ pub struct Camera {
     pixel00_loc: Vec3,
     pixel_delta_u: Vec3,
     pixel_delta_v: Vec3,
+    samples_per_pixel: u64,
 }
+
 impl Camera {
     pub fn render_to_file(&self, file_name: &str) {
         let colors = self.render();
@@ -42,12 +44,16 @@ impl Camera {
             .cartesian_product(0..self.width)
             .progress_count(self.width * self.height)
             .map(|(y, x)| {
-                let pixel_center = self.pixel00_loc
-                    + (self.pixel_delta_u * x as f64)
-                    + (self.pixel_delta_v * y as f64);
-                let ray_direction = pixel_center - self.camera_center;
-                let ray = Ray::new(self.camera_center, ray_direction);
-                self.color(&ray)
+                let mut samples = Vec::new();
+                for _ in 0..self.samples_per_pixel {
+                    let pixel_center = self.pixel00_loc
+                        + (self.pixel_delta_u * x as f64)
+                        + (self.pixel_delta_v * y as f64);
+                    let ray_direction = pixel_center - self.camera_center;
+                    let ray = Ray::new(self.camera_center, ray_direction);
+                    samples.push(self.color(&ray));
+                }
+                Color::average(&samples).unwrap()
             })
             .collect();
         println!("  Done in {:?}", start.elapsed());
@@ -77,6 +83,7 @@ pub struct CameraBuilder {
     viewport_height: f64,
     focal_length: f64,
     camera_center: Vec3,
+    samples_per_pixel: u64,
 }
 
 impl CameraBuilder {
@@ -88,7 +95,13 @@ impl CameraBuilder {
             viewport_height: 2.0,
             focal_length: 1.0,
             camera_center: vec3::ORIGIN,
+            samples_per_pixel: 10,
         }
+    }
+
+    pub fn samples_per_pixel(mut self, samples_per_pixel: u64) -> Self {
+        self.samples_per_pixel = samples_per_pixel;
+        self
     }
 
     pub fn width(mut self, width: u64) -> Self {
@@ -140,6 +153,7 @@ impl CameraBuilder {
             pixel00_loc,
             pixel_delta_u,
             pixel_delta_v,
+            samples_per_pixel: self.samples_per_pixel,
         }
     }
 }
