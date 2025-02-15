@@ -11,18 +11,30 @@ impl Ray {
         Self { origin, direction }
     }
 
-    pub fn hit_sphere(&self, center: Vec3, radius: f64) -> bool {
-        let oc = self.origin - center;
+    pub fn at(&self, t: f64) -> Vec3 {
+        self.origin + self.direction * t
+    }
+
+    pub fn hit_sphere(&self, center: Vec3, radius: f64) -> Option<f64> {
+        let oc = center - self.origin;
         let a = self.direction.dot(&self.direction);
-        let b = 2.0 * oc.dot(&self.direction);
+        let b = -2.0 * oc.dot(&self.direction);
         let c = oc.dot(&oc) - radius * radius;
         let discriminant = b * b - 4.0 * a * c;
-        discriminant >= 0.0
+        if discriminant < 0.0 {
+            None
+        } else {
+            Some((-b - discriminant.sqrt()) / (2.0 * a))
+        }
     }
 
     pub fn color(&self) -> Color {
-        if self.hit_sphere(Vec3::new(0.0, 0.0, -1.0), 0.5) {
-            return Color::green();
+        let center = Vec3::new(0.0, 0.0, -1.0);
+        let radius = 0.5;
+
+        if let Some(t) = self.hit_sphere(center, radius) {
+            let n = (self.at(t) - center).unit_vector();
+            return Color::from_unit_vector(n).unwrap();
         }
 
         let unit_direction = self.direction.unit_vector();

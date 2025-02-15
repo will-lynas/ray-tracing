@@ -1,3 +1,4 @@
+use crate::vec3::Vec3;
 use std::fmt::{self, Display, Formatter};
 
 pub struct Color {
@@ -33,6 +34,10 @@ impl Color {
             )
             .unwrap(),
         )
+    }
+
+    pub fn from_unit_vector(n: Vec3) -> Option<Self> {
+        Self::new(0.5 * (n.x + 1.0), 0.5 * (n.y + 1.0), 0.5 * (n.z + 1.0))
     }
 }
 
