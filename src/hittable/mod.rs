@@ -11,6 +11,7 @@ pub struct HitRecord {
     pub normal: Vec3,
     pub t: f64,
     pub front_face: bool,
+    pub in_ray: Ray,
 }
 
 impl HitRecord {

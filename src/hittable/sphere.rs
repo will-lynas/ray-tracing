@@ -46,6 +46,7 @@ impl Sphere {
             normal,
             t,
             front_face,
+            in_ray: *r,
         })
     }
 }

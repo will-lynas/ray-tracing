@@ -1,12 +1,17 @@
 use crate::vec3::Vec3;
-use std::fmt::{self, Display, Formatter};
+use std::{
+    fmt::{self, Display, Formatter},
+    ops::Mul,
+};
 
 pub const BLACK: Color = Color::unchecked_new(0.0, 0.0, 0.0);
 pub const WHITE: Color = Color::unchecked_new(1.0, 1.0, 1.0);
 pub const RED: Color = Color::unchecked_new(1.0, 0.0, 0.0);
 pub const GREEN: Color = Color::unchecked_new(0.0, 1.0, 0.0);
 pub const BLUE: Color = Color::unchecked_new(0.0, 0.0, 1.0);
+pub const GREY: Color = Color::unchecked_new(0.5, 0.5, 0.5);
 
+#[derive(Debug, Clone, Copy)]
 pub struct Color {
     r: f64,
     g: f64,
@@ -69,5 +74,13 @@ impl Display for Color {
         let g = (self.g.sqrt() * 255.999) as u8;
         let b = (self.b.sqrt() * 255.999) as u8;
         write!(f, "{} {} {}", r, g, b)
+    }
+}
+
+impl Mul<Color> for Color {
+    type Output = Color;
+
+    fn mul(self, rhs: Color) -> Self::Output {
+        Color::new(self.r * rhs.r, self.g * rhs.g, self.b * rhs.b).unwrap()
     }
 }
