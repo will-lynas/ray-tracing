@@ -1,4 +1,4 @@
-use crate::color::Color;
+use crate::color::{Color, BLACK, BLUE, WHITE};
 use crate::ray::Ray;
 use crate::vec3;
 use crate::vec3::Vec3;
@@ -70,7 +70,7 @@ impl Camera {
 
     pub fn color(&self, r: &Ray, depth: u64) -> Color {
         if depth == 0 {
-            return Color::black();
+            return BLACK;
         }
 
         let interval = 0.001..f64::MAX;
@@ -86,7 +86,7 @@ impl Camera {
     pub fn background(r: &Ray) -> Color {
         let unit_direction = r.direction.unit_vector();
         let t = 0.5 * (unit_direction.y + 1.0);
-        Color::white().lerp(&Color::blue(), t).unwrap()
+        WHITE.lerp(&BLUE, t).unwrap()
     }
 }
 

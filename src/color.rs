@@ -1,6 +1,12 @@
 use crate::vec3::Vec3;
 use std::fmt::{self, Display, Formatter};
 
+pub const BLACK: Color = Color::unchecked_new(0.0, 0.0, 0.0);
+pub const WHITE: Color = Color::unchecked_new(1.0, 1.0, 1.0);
+pub const RED: Color = Color::unchecked_new(1.0, 0.0, 0.0);
+pub const GREEN: Color = Color::unchecked_new(0.0, 1.0, 0.0);
+pub const BLUE: Color = Color::unchecked_new(0.0, 0.0, 1.0);
+
 pub struct Color {
     r: f64,
     g: f64,
@@ -13,20 +19,8 @@ impl Color {
             .then_some(Self { r, g, b })
     }
 
-    pub fn white() -> Self {
-        Self::new(1.0, 1.0, 1.0).unwrap()
-    }
-
-    pub fn black() -> Self {
-        Self::new(0.0, 0.0, 0.0).unwrap()
-    }
-
-    pub fn blue() -> Self {
-        Self::new(0.0, 0.0, 1.0).unwrap()
-    }
-
-    pub fn green() -> Self {
-        Self::new(0.0, 1.0, 0.0).unwrap()
+    const fn unchecked_new(r: f64, g: f64, b: f64) -> Self {
+        Self { r, g, b }
     }
 
     pub fn lerp(&self, other: &Self, t: f64) -> Option<Self> {
