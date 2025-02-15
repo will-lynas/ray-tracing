@@ -1,6 +1,10 @@
+use std::ops::Range;
+
 use crate::ray::Ray;
 use crate::vec3::Vec3;
-use std::ops::Range;
+
+mod sphere;
+pub use sphere::Sphere;
 
 pub struct HitRecord {
     pub point: Vec3,
@@ -17,6 +21,14 @@ impl HitRecord {
     }
 }
 
-pub trait Hittable {
-    fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord>;
+pub enum Hittable {
+    Sphere(Sphere),
+}
+
+impl Hittable {
+    pub fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord> {
+        match self {
+            Hittable::Sphere(sphere) => sphere.hit(r, interval),
+        }
+    }
 }

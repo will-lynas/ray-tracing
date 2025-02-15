@@ -4,7 +4,7 @@ use std::ops::Range;
 
 #[derive(Default)]
 pub struct World {
-    pub objects: Vec<Box<dyn Hittable>>,
+    pub objects: Vec<Hittable>,
 }
 
 impl World {

@@ -1,4 +1,4 @@
-use crate::hittable::{HitRecord, Hittable};
+use crate::hittable::HitRecord;
 use crate::ray::Ray;
 use crate::vec3::Vec3;
 use std::ops::Range;
@@ -12,10 +12,8 @@ impl Sphere {
     pub fn new(center: Vec3, radius: f64) -> Option<Self> {
         (radius > 0.0).then_some(Self { center, radius })
     }
-}
 
-impl Hittable for Sphere {
-    fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord> {
+    pub fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord> {
         let oc = self.center - r.origin;
         let a = r.direction.length_squared();
         let h = r.direction.dot(&oc);
