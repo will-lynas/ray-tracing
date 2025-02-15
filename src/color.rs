@@ -10,6 +10,7 @@ pub const RED: Color = Color::unchecked_new(1.0, 0.0, 0.0);
 pub const GREEN: Color = Color::unchecked_new(0.0, 1.0, 0.0);
 pub const BLUE: Color = Color::unchecked_new(0.0, 0.0, 1.0);
 pub const GREY: Color = Color::unchecked_new(0.5, 0.5, 0.5);
+pub const PURPLE: Color = Color::unchecked_new(1.0, 0.0, 1.0);
 
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
