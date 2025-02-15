@@ -74,7 +74,7 @@ impl Display for Color {
         let r = (self.r.sqrt() * 255.999) as u8;
         let g = (self.g.sqrt() * 255.999) as u8;
         let b = (self.b.sqrt() * 255.999) as u8;
-        write!(f, "{} {} {}", r, g, b)
+        write!(f, "{r} {g} {b}")
     }
 }
 

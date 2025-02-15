@@ -1,4 +1,4 @@
-use weekend_ray_tracing::camera::CameraBuilder;
+use weekend_ray_tracing::camera::Builder;
 use weekend_ray_tracing::color::Color;
 use weekend_ray_tracing::hittable::Sphere;
 use weekend_ray_tracing::material::{Lambertian, Metal};
@@ -19,7 +19,7 @@ fn main() {
 
     world.objects.push(sphere);
     world.objects.push(ground);
-    let camera = CameraBuilder::new(world).build();
+    let camera = Builder::new(world).build();
 
     camera.render_to_file("out.ppm");
 }

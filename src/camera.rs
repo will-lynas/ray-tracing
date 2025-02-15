@@ -35,7 +35,7 @@ impl Camera {
         writeln!(writer, "255").unwrap();
 
         colors.into_iter().progress().for_each(|color| {
-            writeln!(writer, "{}", color).unwrap();
+            writeln!(writer, "{color}").unwrap();
         });
     }
 
@@ -88,7 +88,7 @@ impl Camera {
     }
 }
 
-pub struct CameraBuilder {
+pub struct Builder {
     world: World,
     width: u64,
     aspect_ratio: f64,
@@ -99,7 +99,7 @@ pub struct CameraBuilder {
     max_depth: u64,
 }
 
-impl CameraBuilder {
+impl Builder {
     pub fn new(world: World) -> Self {
         Self {
             world,

@@ -28,7 +28,7 @@ impl World {
         let mut output = None;
         let mut check_interval = interval.clone();
 
-        for object in self.objects.iter() {
+        for object in &self.objects {
             if let Some(temp_record) = object.hittable.hit(r, &check_interval) {
                 check_interval = check_interval.start..temp_record.t;
                 output = Some((temp_record, object.material));

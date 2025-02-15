@@ -1,4 +1,4 @@
-use weekend_ray_tracing::camera::CameraBuilder;
+use weekend_ray_tracing::camera::Builder;
 use weekend_ray_tracing::color::{Color, BLUE, PURPLE};
 use weekend_ray_tracing::hittable::Sphere;
 use weekend_ray_tracing::material::{Lambertian, Metal};
@@ -30,7 +30,7 @@ fn main() {
     world.objects.push(left);
     world.objects.push(right);
 
-    let camera = CameraBuilder::new(world)
+    let camera = Builder::new(world)
         .width(1000)
         .samples_per_pixel(100)
         .max_depth(100)
