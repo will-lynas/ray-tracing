@@ -15,15 +15,6 @@ pub struct Object {
     pub material: Material,
 }
 
-impl Object {
-    pub fn new(hittable: impl Into<Hittable>, material: impl Into<Material>) -> Self {
-        Self {
-            hittable: hittable.into(),
-            material: material.into(),
-        }
-    }
-}
-
 #[derive(Default)]
 pub struct World {
     pub objects: Vec<Object>,
@@ -47,5 +38,12 @@ impl World {
     pub fn bounce(&self, r: &Ray, interval: &Range<f64>) -> Option<(Ray, Color)> {
         let (hit_record, material) = self.hit(r, interval)?;
         material.scatter(&hit_record)
+    }
+
+    pub fn add(&mut self, hittable: impl Into<Hittable>, material: impl Into<Material>) {
+        self.objects.push(Object {
+            hittable: hittable.into(),
+            material: material.into(),
+        });
     }
 }
