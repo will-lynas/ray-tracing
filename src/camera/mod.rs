@@ -11,7 +11,6 @@ use std::{
 
 pub use builder::Builder;
 use indicatif::ProgressIterator;
-use itertools::Itertools;
 use rand::Rng;
 
 use crate::{
@@ -21,6 +20,7 @@ use crate::{
         LIGHT_BLUE,
         WHITE,
     },
+    itertools::Itertools,
     ray::Ray,
     vec3::Vec3,
     world::World,
