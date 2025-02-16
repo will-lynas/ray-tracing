@@ -18,7 +18,7 @@ use crate::{
     color::{
         Color,
         BLACK,
-        BLUE,
+        LIGHT_BLUE,
         WHITE,
     },
     ray::Ray,
@@ -100,6 +100,6 @@ impl Camera {
     pub fn background(r: &Ray) -> Color {
         let unit_direction = r.direction.unit_vector();
         let t = 0.5 * (unit_direction.y + 1.0);
-        WHITE.lerp(&BLUE, t).unwrap()
+        WHITE.lerp(&LIGHT_BLUE, t).unwrap()
     }
 }

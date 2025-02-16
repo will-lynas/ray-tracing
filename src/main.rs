@@ -3,7 +3,7 @@ use weekend_ray_tracing::{
     color::{
         Color,
         BLUE,
-        RED,
+        PURPLE,
     },
     hittable::Sphere,
     material::{
@@ -23,7 +23,7 @@ fn main() {
 
     let ground = Object::new(
         Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).unwrap(),
-        Lambertian::new(RED),
+        Lambertian::new(PURPLE),
     );
     let center = Object::new(
         Sphere::new(Vec3::new(0.0, 0.0, -1.2), 0.5).unwrap(),
