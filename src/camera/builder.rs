@@ -20,7 +20,7 @@ impl Builder {
     pub fn new(world: World) -> Self {
         Self {
             world,
-            width: 1000,
+            width: 1600,
             aspect_ratio: 16.0 / 9.0,
             viewport_height: 2.0,
             focal_length: 1.0,

@@ -1,7 +1,9 @@
+mod dielectric;
 mod lambertian;
 mod metal;
 mod uniform;
 
+pub use dielectric::Dielectric;
 pub use lambertian::Lambertian;
 pub use metal::Metal;
 pub use uniform::Uniform;
@@ -17,6 +19,7 @@ pub enum Material {
     Lambertian(Lambertian),
     Uniform(Uniform),
     Metal(Metal),
+    Dielectric(Dielectric),
 }
 
 impl Material {
@@ -25,6 +28,7 @@ impl Material {
             Material::Lambertian(lambertian) => lambertian.scatter(hit_record),
             Material::Uniform(uniform) => uniform.scatter(hit_record),
             Material::Metal(metal) => metal.scatter(hit_record),
+            Material::Dielectric(dielectric) => dielectric.scatter(hit_record),
         }
     }
 }
@@ -44,5 +48,11 @@ impl From<Uniform> for Material {
 impl From<Metal> for Material {
     fn from(metal: Metal) -> Self {
         Self::Metal(metal)
+    }
+}
+
+impl From<Dielectric> for Material {
+    fn from(dielectric: Dielectric) -> Self {
+        Self::Dielectric(dielectric)
     }
 }
