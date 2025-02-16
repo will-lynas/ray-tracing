@@ -16,6 +16,7 @@ pub const GREEN: Color = Color::unchecked_new(0.0, 1.0, 0.0);
 pub const BLUE: Color = Color::unchecked_new(0.0, 0.0, 1.0);
 pub const GREY: Color = Color::unchecked_new(0.5, 0.5, 0.5);
 pub const PURPLE: Color = Color::unchecked_new(1.0, 0.0, 1.0);
+pub const TURQUOISE: Color = Color::unchecked_new_u8(175, 238, 238);
 
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
@@ -32,6 +33,14 @@ impl Color {
 
     const fn unchecked_new(r: f64, g: f64, b: f64) -> Self {
         Self { r, g, b }
+    }
+
+    const fn unchecked_new_u8(r: u8, g: u8, b: u8) -> Self {
+        Self {
+            r: r as f64 / 255.0,
+            g: g as f64 / 255.0,
+            b: b as f64 / 255.0,
+        }
     }
 
     pub fn lerp(&self, other: &Self, t: f64) -> Option<Self> {

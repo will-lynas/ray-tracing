@@ -30,11 +30,11 @@ fn main() {
     );
     let left = Object::new(
         Sphere::new(Vec3::new(-1.0, 0.0, -0.85), 0.5).unwrap(),
-        Metal::new(Color::new(0.7, 1.0, 0.7).unwrap()),
+        Metal::new(Color::new(0.7, 1.0, 0.7).unwrap(), 0.0).unwrap(),
     );
     let right = Object::new(
         Sphere::new(Vec3::new(0.65, -0.25, -0.7), 0.25).unwrap(),
-        Metal::new(Color::new(0.9, 0.9, 0.9).unwrap()),
+        Metal::new(Color::new(0.9, 0.9, 0.9).unwrap(), 0.0).unwrap(),
     );
 
     world.objects.push(ground);
