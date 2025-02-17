@@ -12,6 +12,7 @@ pub struct ProgressBarIterator<I> {
     iterator: I,
     total: u64,
     current: u64,
+    started: bool,
 }
 
 impl<I> ProgressBarIterator<I>
@@ -23,6 +24,7 @@ where
             iterator,
             total,
             current: 0,
+            started: false,
         }
     }
 
@@ -37,9 +39,14 @@ where
         );
     }
 
+    fn print_start() {
+        print!("\x1B[?25l"); // Turn off cursor
+    }
+
     fn print_end() {
         print!("\r"); // Move to the beginning of the line
         print!("\x1B[2K"); // Clear the line
+        print!("\x1B[?25h"); // Turn on cursor
     }
 }
 
@@ -50,6 +57,11 @@ where
     type Item = I::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if !self.started {
+            self.started = true;
+            Self::print_start();
+        }
+
         if let Some(item) = self.iterator.next() {
             self.print_progress();
             self.current += 1;
