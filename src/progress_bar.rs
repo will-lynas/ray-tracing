@@ -32,8 +32,13 @@ where
     type Item = I::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
-        println!("Progress: {}/{}", self.current, self.total);
-        self.current += 1;
-        self.iterator.next()
+        if let Some(item) = self.iterator.next() {
+            print!("\rProgress: {}/{}", self.current, self.total);
+            self.current += 1;
+            Some(item)
+        } else {
+            print!("\r");
+            None
+        }
     }
 }
