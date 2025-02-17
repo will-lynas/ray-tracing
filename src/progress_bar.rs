@@ -7,12 +7,14 @@ pub trait ProgressBar: Iterator + Sized {
 impl<T> ProgressBar for T where T: Iterator {}
 
 const BAR_LENGTH: usize = 100;
+const PRINT_INTERVAL: f64 = 0.0001;
 
 pub struct ProgressBarIterator<I> {
     iterator: I,
     total: u64,
     current: u64,
     started: bool,
+    last_progress: f64,
 }
 
 impl<I> ProgressBarIterator<I>
@@ -25,18 +27,23 @@ where
             total,
             current: 0,
             started: false,
+            last_progress: -PRINT_INTERVAL * 2.0,
         }
     }
 
-    fn print_progress(&self) {
+    fn print_progress(&mut self) {
         let progress = self.current as f64 / self.total as f64;
-        let bar_width = (BAR_LENGTH as f64 * progress) as usize;
-        print!(
-            "\r[{}{}] {}%",
-            "=".repeat(bar_width),
-            " ".repeat(BAR_LENGTH - bar_width),
-            (progress * 100.0).round() as u64
-        );
+
+        if progress - self.last_progress > PRINT_INTERVAL {
+            let partial_bar_length = (BAR_LENGTH as f64 * progress) as usize;
+            print!(
+                "\r[{}{}] {:.2}%",
+                "=".repeat(partial_bar_length),
+                " ".repeat(BAR_LENGTH - partial_bar_length),
+                progress * 100.0
+            );
+            self.last_progress = progress;
+        }
     }
 
     fn print_start() {
