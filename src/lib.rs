@@ -13,5 +13,6 @@ pub mod hittable;
 mod itertools;
 pub mod material;
 pub mod ray;
+mod rng;
 pub mod vec3;
 pub mod world;
