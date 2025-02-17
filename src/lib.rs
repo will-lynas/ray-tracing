@@ -12,6 +12,7 @@ pub mod color;
 pub mod hittable;
 mod itertools;
 pub mod material;
+mod progress_bar;
 pub mod ray;
 mod rng;
 pub mod vec3;

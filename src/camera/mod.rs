@@ -10,7 +10,6 @@ use std::{
 };
 
 pub use builder::Builder;
-use indicatif::ProgressIterator;
 
 use crate::{
     color::{
@@ -20,6 +19,7 @@ use crate::{
         WHITE,
     },
     itertools::Itertools,
+    progress_bar::ProgressBar,
     ray::Ray,
     rng::ThreadRng,
     vec3::Vec3,
@@ -50,9 +50,12 @@ impl Camera {
         writeln!(writer, "{} {}", self.width, self.height).unwrap();
         writeln!(writer, "255").unwrap();
 
-        colors.into_iter().progress().for_each(|color| {
-            writeln!(writer, "{color}").unwrap();
-        });
+        colors
+            .into_iter()
+            .progress_count(self.width * self.height)
+            .for_each(|color| {
+                writeln!(writer, "{color}").unwrap();
+            });
     }
 
     pub fn render(&self) -> Vec<Color> {
