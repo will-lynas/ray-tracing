@@ -23,8 +23,18 @@ impl Dielectric {
         } else {
             self.refraction_index
         };
+
         let unit_direction = hit_record.in_ray.direction.unit_vector();
-        let refracted = unit_direction.refract(&hit_record.normal, refraction_index);
+        let cos_theta = (-unit_direction).dot(&hit_record.normal).min(1.0);
+        let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
+
+        let cannot_refract = refraction_index * sin_theta > 1.0;
+        let refracted = if cannot_refract {
+            unit_direction.reflect(&hit_record.normal)
+        } else {
+            unit_direction.refract(&hit_record.normal, refraction_index)
+        };
+
         let scattered = Ray::new(hit_record.point, refracted);
         Some((scattered, WHITE))
     }
