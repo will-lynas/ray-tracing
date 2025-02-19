@@ -29,6 +29,7 @@ use crate::{
     world::World,
 };
 
+#[derive(Clone)]
 pub struct Camera {
     world: World,
     width: u64,

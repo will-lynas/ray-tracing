@@ -6,6 +6,7 @@ use crate::{
     vec3::Vec3,
 };
 
+#[derive(Clone)]
 pub struct Sphere {
     center: Vec3,
     radius: f64,

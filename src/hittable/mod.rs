@@ -24,6 +24,7 @@ impl HitRecord {
     }
 }
 
+#[derive(Clone)]
 pub enum Hittable {
     Sphere(Sphere),
 }

@@ -10,12 +10,13 @@ use crate::{
     ray::Ray,
 };
 
+#[derive(Clone)]
 pub struct Object {
     pub hittable: Hittable,
     pub material: Material,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct World {
     pub objects: Vec<Object>,
 }
