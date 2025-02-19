@@ -1,10 +1,10 @@
-pub trait ProgressBar: Iterator + Sized {
+pub trait ProgressBarIter: Iterator + Sized {
     fn progress_count(self, total: u64) -> ProgressBarIterator<Self> {
         ProgressBarIterator::new(self, total)
     }
 }
 
-impl<T> ProgressBar for T where T: Iterator {}
+impl<T> ProgressBarIter for T where T: Iterator {}
 
 const BAR_LENGTH: usize = 100;
 const PRINT_INTERVAL: f64 = 0.0001;

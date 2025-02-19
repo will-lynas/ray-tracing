@@ -19,7 +19,7 @@ use crate::{
         WHITE,
     },
     itertools::Itertools,
-    progress_bar::ProgressBar,
+    progress_bar::ProgressBarIter,
     ray::Ray,
     rng::ThreadRng,
     vec3::Vec3,
