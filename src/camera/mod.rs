@@ -65,12 +65,13 @@ impl Camera {
             .cartesian_product(0..self.width)
             .progress_count(self.width * self.height)
             .map(|(y, x)| {
-                let mut samples = Vec::new();
-                for _ in 0..self.samples_per_pixel {
-                    let ray_direction = self.sample_location(x, y) - self.camera_center;
-                    let ray = Ray::new(self.camera_center, ray_direction);
-                    samples.push(self.color(&ray, self.max_depth));
-                }
+                let samples: Vec<_> = (0..self.samples_per_pixel)
+                    .map(|_| {
+                        let ray_direction = self.sample_location(x, y) - self.camera_center;
+                        let ray = Ray::new(self.camera_center, ray_direction);
+                        self.color(&ray, self.max_depth)
+                    })
+                    .collect();
                 Color::average(&samples).unwrap()
             })
             .collect();
