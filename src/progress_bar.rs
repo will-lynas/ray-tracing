@@ -29,6 +29,49 @@ fn print_progress(progress: f64) {
     );
 }
 
+pub struct ProgressBar {
+    total: u64,
+    current: u64,
+    started: bool,
+    last_progress: f64,
+}
+
+impl ProgressBar {
+    pub fn new(total: u64) -> Self {
+        Self {
+            total,
+            current: 0,
+            started: false,
+            last_progress: -PRINT_INTERVAL * 2.0,
+        }
+    }
+
+    fn print_progress(&mut self) {
+        let progress = self.current as f64 / self.total as f64;
+
+        if progress - self.last_progress > PRINT_INTERVAL {
+            print_progress(progress);
+            self.last_progress = progress;
+        }
+    }
+
+    pub fn increment(&mut self) {
+        if !self.started {
+            self.started = true;
+            print_start();
+        }
+
+        if self.current < self.total {
+            self.print_progress();
+            self.current += 1;
+        }
+
+        if self.current == self.total {
+            print_end();
+        }
+    }
+}
+
 pub struct ProgressBarIterator<I> {
     iterator: I,
     total: u64,

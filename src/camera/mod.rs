@@ -19,7 +19,10 @@ use crate::{
         WHITE,
     },
     itertools::Itertools,
-    progress_bar::ProgressBarIter,
+    progress_bar::{
+        ProgressBar,
+        ProgressBarIter,
+    },
     ray::Ray,
     rng::ThreadRng,
     vec3::Vec3,
@@ -61,9 +64,9 @@ impl Camera {
     pub fn render(&self) -> Vec<Color> {
         println!("Rendering...");
         let start = Instant::now();
+        let mut bar = ProgressBar::new(self.height * self.width);
         let colors = (0..self.height)
             .cartesian_product(0..self.width)
-            .progress_count(self.width * self.height)
             .map(|(y, x)| {
                 let samples: Vec<_> = (0..self.samples_per_pixel)
                     .map(|_| {
@@ -72,6 +75,7 @@ impl Camera {
                         self.color(&ray, self.max_depth)
                     })
                     .collect();
+                bar.increment();
                 Color::average(&samples).unwrap()
             })
             .collect();
