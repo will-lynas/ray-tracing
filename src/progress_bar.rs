@@ -9,6 +9,26 @@ impl<T> ProgressBarIter for T where T: Iterator {}
 const BAR_LENGTH: usize = 100;
 const PRINT_INTERVAL: f64 = 0.0001;
 
+fn print_start() {
+    print!("\x1B[?25l"); // Turn off cursor
+}
+
+fn print_end() {
+    print!("\r"); // Move to the beginning of the line
+    print!("\x1B[2K"); // Clear the line
+    print!("\x1B[?25h"); // Turn on cursor
+}
+
+fn print_progress(progress: f64) {
+    let partial_bar_length = (BAR_LENGTH as f64 * progress) as usize;
+    print!(
+        "\r[{}{}] {:.2}%",
+        "=".repeat(partial_bar_length),
+        " ".repeat(BAR_LENGTH - partial_bar_length),
+        progress * 100.0
+    );
+}
+
 pub struct ProgressBarIterator<I> {
     iterator: I,
     total: u64,
@@ -35,25 +55,9 @@ where
         let progress = self.current as f64 / self.total as f64;
 
         if progress - self.last_progress > PRINT_INTERVAL {
-            let partial_bar_length = (BAR_LENGTH as f64 * progress) as usize;
-            print!(
-                "\r[{}{}] {:.2}%",
-                "=".repeat(partial_bar_length),
-                " ".repeat(BAR_LENGTH - partial_bar_length),
-                progress * 100.0
-            );
+            print_progress(progress);
             self.last_progress = progress;
         }
-    }
-
-    fn print_start() {
-        print!("\x1B[?25l"); // Turn off cursor
-    }
-
-    fn print_end() {
-        print!("\r"); // Move to the beginning of the line
-        print!("\x1B[2K"); // Clear the line
-        print!("\x1B[?25h"); // Turn on cursor
     }
 }
 
@@ -66,7 +70,7 @@ where
     fn next(&mut self) -> Option<Self::Item> {
         if !self.started {
             self.started = true;
-            Self::print_start();
+            print_start();
         }
 
         if let Some(item) = self.iterator.next() {
@@ -74,7 +78,7 @@ where
             self.current += 1;
             Some(item)
         } else {
-            Self::print_end();
+            print_end();
             None
         }
     }
