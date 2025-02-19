@@ -61,6 +61,17 @@ impl Camera {
             });
     }
 
+    fn pixel_color(&self, x: u64, y: u64) -> Color {
+        let samples: Vec<_> = (0..self.samples_per_pixel)
+            .map(|_| {
+                let ray_direction = self.sample_location(x, y) - self.camera_center;
+                let ray = Ray::new(self.camera_center, ray_direction);
+                self.color(&ray, self.max_depth)
+            })
+            .collect();
+        Color::average(&samples).unwrap()
+    }
+
     pub fn render(&self) -> Vec<Color> {
         println!("Rendering...");
         let start = Instant::now();
@@ -68,15 +79,9 @@ impl Camera {
         let colors = (0..self.height)
             .cartesian_product(0..self.width)
             .map(|(y, x)| {
-                let samples: Vec<_> = (0..self.samples_per_pixel)
-                    .map(|_| {
-                        let ray_direction = self.sample_location(x, y) - self.camera_center;
-                        let ray = Ray::new(self.camera_center, ray_direction);
-                        self.color(&ray, self.max_depth)
-                    })
-                    .collect();
+                let color = self.pixel_color(x, y);
                 bar.increment();
-                Color::average(&samples).unwrap()
+                color
             })
             .collect();
         println!("  Done in {:?}", start.elapsed());
