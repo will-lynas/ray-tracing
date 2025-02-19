@@ -25,13 +25,13 @@ impl Builder {
             viewport_height: 2.0,
             focal_length: 1.0,
             camera_center: vec3::ORIGIN,
-            samples_per_pixel: 400,
+            samples_per_pixel: 200,
             max_depth: 100,
         }
     }
 
     pub fn draft(mut self) -> Self {
-        self.width = 800;
+        self.width = 400;
         self.samples_per_pixel = 100;
         self.max_depth = 20;
         self
