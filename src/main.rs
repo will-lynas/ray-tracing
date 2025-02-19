@@ -30,28 +30,16 @@ fn main() {
         Lambertian::new(BLUE.mul(0.5).unwrap()),
     );
 
-    // Left - Green Metal
+    // Left - Air bubble
     world.add(
         Sphere::new(Vec3::new(-1.0, 0.0, -0.85), 0.5).unwrap(),
-        Metal::new(Color::new(0.7, 1.0, 0.7).unwrap(), 0.0).unwrap(),
+        Dielectric::new(1.0 / 1.33),
     );
 
     // Right - Metal
     world.add(
         Sphere::new(Vec3::new(0.65, -0.25, -0.7), 0.25).unwrap(),
         Metal::new(Color::new(0.95, 0.95, 0.95).unwrap(), 0.0).unwrap(),
-    );
-
-    // Front left - Medium Glass
-    world.add(
-        Sphere::new(Vec3::new(-0.2, -0.35, -0.6), 0.15).unwrap(),
-        Dielectric::new(1.52),
-    );
-
-    // Front right - Small Glass
-    world.add(
-        Sphere::new(Vec3::new(0.35, -0.4, -0.9), 0.1).unwrap(),
-        Dielectric::new(1.8),
     );
 
     let camera = Builder::new(world)
