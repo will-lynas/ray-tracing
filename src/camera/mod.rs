@@ -6,6 +6,11 @@ use std::{
         BufWriter,
         Write,
     },
+    sync::mpsc,
+    thread::{
+        self,
+        available_parallelism,
+    },
     time::Instant,
 };
 
@@ -76,17 +81,45 @@ impl Camera {
     pub fn render(&self) -> Vec<Color> {
         println!("Rendering...");
         let start = Instant::now();
-        let mut bar = ProgressBar::new(self.height * self.width);
-        let colors = (0..self.height)
-            .cartesian_product(0..self.width)
-            .map(|(y, x)| {
-                let color = self.pixel_color(x, y);
-                bar.increment();
-                color
+
+        let num_threads = available_parallelism().unwrap().get();
+        let mut batches = vec![Vec::new(); num_threads];
+        for (y, x) in (0..self.height).cartesian_product(0..self.width) {
+            let i = x + y * self.width;
+            let batch_index = i as usize % num_threads;
+            batches[batch_index].push((y, x));
+        }
+
+        let (tx, rx) = mpsc::channel();
+        let handles: Vec<_> = batches
+            .into_iter()
+            .map(|batch| {
+                let tx = tx.clone();
+                let camera = self.clone();
+                thread::spawn(move || {
+                    for (y, x) in batch {
+                        let color = camera.pixel_color(x, y);
+                        tx.send(((y, x), color)).unwrap();
+                    }
+                })
             })
             .collect();
+        drop(tx);
+
+        let mut bar = ProgressBar::new(self.height * self.width);
+        let mut result = vec![Color::default(); (self.height * self.width) as usize];
+
+        for ((y, x), color) in rx {
+            result[(y * self.width + x) as usize] = color;
+            bar.increment();
+        }
+
+        for handle in handles {
+            handle.join().unwrap();
+        }
+
         println!("  Done in {:?}", start.elapsed());
-        colors
+        result
     }
 
     fn sample_location(&self, x: u64, y: u64) -> Vec3 {

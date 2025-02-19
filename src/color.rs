@@ -19,7 +19,7 @@ pub const PURPLE: Color = Color::unchecked_new(1.0, 0.0, 1.0);
 pub const TURQUOISE: Color = Color::unchecked_new_u8(175, 238, 238);
 pub const LIGHT_BLUE: Color = Color::unchecked_new(0.5, 0.7, 1.0);
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct Color {
     r: f64,
     g: f64,
