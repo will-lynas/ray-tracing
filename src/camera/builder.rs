@@ -1,3 +1,5 @@
+use std::f64::consts::PI;
+
 use super::Camera;
 use crate::{
     vec3,
@@ -11,6 +13,8 @@ pub struct Builder {
     aspect_ratio: f64,
     samples_per_pixel: u64,
     max_depth: u64,
+    /// Vertical field of view in degrees
+    vertical_fov: f64,
 }
 
 impl Builder {
@@ -21,6 +25,7 @@ impl Builder {
             aspect_ratio: 16.0 / 9.0,
             samples_per_pixel: 200,
             max_depth: 100,
+            vertical_fov: 90.0,
         }
     }
 
@@ -51,12 +56,20 @@ impl Builder {
         self
     }
 
+    pub fn vertical_fov(mut self, vertical_fov: f64) -> Self {
+        self.vertical_fov = vertical_fov;
+        self
+    }
+
     pub fn build(self) -> Camera {
         let camera_center = vec3::ORIGIN;
-        let viewport_height = 2.0;
         let focal_length = 1.0;
 
         let height = (self.width as f64 / self.aspect_ratio) as u64;
+
+        let theta = self.vertical_fov * (PI / 180.0);
+        let h = (theta / 2.0).tan();
+        let viewport_height = 2.0 * h * focal_length;
         let viewport_width = viewport_height * (self.width as f64 / height as f64);
 
         let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);
