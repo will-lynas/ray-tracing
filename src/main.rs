@@ -48,7 +48,9 @@ fn main() {
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
         .look_at(Vec3::new(0.0, 0.0, -1.0))
         .vertical_fov(30.0)
-        .draft()
+        .defocus_angle(0.5)
+        .focus_dist(3.6)
+        // .draft()
         .build();
     camera.render_to_file("out.ppm");
 }

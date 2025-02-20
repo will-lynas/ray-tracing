@@ -51,6 +51,19 @@ impl Vec3 {
         }
     }
 
+    pub fn random_in_unit_disk() -> Self {
+        loop {
+            let p = Self::new(
+                ThreadRng::random_range(-1.0..1.0),
+                ThreadRng::random_range(-1.0..1.0),
+                0.0,
+            );
+            if p.length_squared() < 1.0 {
+                return p;
+            }
+        }
+    }
+
     pub fn random_in_hemisphere(&self) -> Self {
         let v = Self::random_unit_vector();
         if self.dot(&v) > 0.0 {

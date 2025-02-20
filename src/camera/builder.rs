@@ -18,6 +18,8 @@ pub struct Builder {
     look_from: Vec3,
     look_at: Vec3,
     vup: Vec3,
+    defocus_angle: f64,
+    focus_dist: f64,
 }
 
 impl Builder {
@@ -32,6 +34,8 @@ impl Builder {
             look_from: vec3::ORIGIN,
             look_at: Vec3::new(0.0, 0.0, -1.0),
             vup: Vec3::new(0.0, 1.0, 0.0),
+            defocus_angle: 0.0,
+            focus_dist: 10.0,
         }
     }
 
@@ -82,15 +86,24 @@ impl Builder {
         self
     }
 
+    pub fn defocus_angle(mut self, defocus_angle: f64) -> Self {
+        self.defocus_angle = defocus_angle;
+        self
+    }
+
+    pub fn focus_dist(mut self, focus_dist: f64) -> Self {
+        self.focus_dist = focus_dist;
+        self
+    }
+
     pub fn build(self) -> Camera {
         let camera_center = self.look_from;
-        let focal_length = (self.look_from - self.look_at).length();
 
         let height = (self.width as f64 / self.aspect_ratio) as u64;
 
         let theta = self.vertical_fov * (PI / 180.0);
         let h = (theta / 2.0).tan();
-        let viewport_height = 2.0 * h * focal_length;
+        let viewport_height = 2.0 * h * self.focus_dist;
         let viewport_width = viewport_height * (self.width as f64 / height as f64);
 
         let w = (self.look_from - self.look_at).unit_vector();
@@ -104,9 +117,14 @@ impl Builder {
         let pixel_delta_v = viewport_v / height as f64;
 
         let viewport_upper_left =
-            camera_center - w * focal_length - (viewport_u + viewport_v) * 0.5;
+            camera_center - w * self.focus_dist - (viewport_u + viewport_v) * 0.5;
 
         let pixel00_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
+
+        let theta = self.defocus_angle * (PI / 180.0);
+        let defocus_radius = self.focus_dist * (theta / 2.0).tan();
+        let defocus_dist_u = u * defocus_radius;
+        let defocus_dist_v = v * defocus_radius;
 
         Camera {
             world: self.world,
@@ -118,6 +136,8 @@ impl Builder {
             pixel_delta_v,
             samples_per_pixel: self.samples_per_pixel,
             max_depth: self.max_depth,
+            defocus_dist_u,
+            defocus_dist_v,
         }
     }
 }

@@ -45,6 +45,8 @@ pub struct Camera {
     pixel_delta_v: Vec3,
     samples_per_pixel: u64,
     max_depth: u64,
+    defocus_dist_u: Vec3,
+    defocus_dist_v: Vec3,
 }
 
 impl Camera {
@@ -67,11 +69,17 @@ impl Camera {
             });
     }
 
+    fn sample_ray_origin(&self) -> Vec3 {
+        let p = Vec3::random_in_unit_disk();
+        self.camera_center + self.defocus_dist_u * p.x + self.defocus_dist_v * p.y
+    }
+
     fn pixel_color(&self, x: u64, y: u64) -> Color {
         let samples: Vec<_> = (0..self.samples_per_pixel)
             .map(|_| {
-                let ray_direction = self.sample_location(x, y) - self.camera_center;
-                let ray = Ray::new(self.camera_center, ray_direction);
+                let ray_origin = self.sample_ray_origin();
+                let ray_direction = self.sample_location(x, y) - ray_origin;
+                let ray = Ray::new(ray_origin, ray_direction);
                 self.color(&ray, self.max_depth)
             })
             .collect();
