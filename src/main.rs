@@ -1,10 +1,6 @@
 use weekend_ray_tracing::{
     camera::Builder,
-    color::{
-        Color,
-        BLUE,
-        PURPLE,
-    },
+    color::Color,
     hittable::Sphere,
     material::{
         Dielectric,
@@ -21,19 +17,25 @@ fn main() {
     // Ground
     world.add(
         Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).unwrap(),
-        Lambertian::new(PURPLE),
+        Lambertian::new(Color::new(0.48, 0.73, 0.2).unwrap()),
     );
 
     // Center - Solid Blue
     world.add(
         Sphere::new(Vec3::new(0.0, 0.0, -1.2), 0.5).unwrap(),
-        Lambertian::new(BLUE.mul(0.5).unwrap()),
+        Lambertian::new(Color::new(0.1, 0.2, 0.5).unwrap()),
     );
 
-    // Left - Air bubble
+    // Left - Glass sphere
     world.add(
         Sphere::new(Vec3::new(-1.0, 0.0, -0.85), 0.5).unwrap(),
-        Dielectric::new(1.0 / 1.33),
+        Dielectric::new(1.5),
+    );
+
+    // Left - Inside of glass sphere
+    world.add(
+        Sphere::new(Vec3::new(-1.0, 0.0, -0.85), 0.4).unwrap(),
+        Dielectric::new(1.0 / 1.5),
     );
 
     // Right - Metal
