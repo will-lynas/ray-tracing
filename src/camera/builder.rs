@@ -13,7 +13,6 @@ pub struct Builder {
     aspect_ratio: f64,
     samples_per_pixel: u64,
     max_depth: u64,
-    /// Vertical field of view in degrees
     vertical_fov: f64,
     look_from: Vec3,
     look_at: Vec3,
