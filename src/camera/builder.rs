@@ -15,6 +15,9 @@ pub struct Builder {
     max_depth: u64,
     /// Vertical field of view in degrees
     vertical_fov: f64,
+    look_from: Vec3,
+    look_at: Vec3,
+    vup: Vec3,
 }
 
 impl Builder {
@@ -26,6 +29,9 @@ impl Builder {
             samples_per_pixel: 200,
             max_depth: 100,
             vertical_fov: 90.0,
+            look_from: vec3::ORIGIN,
+            look_at: Vec3::new(0.0, 0.0, -1.0),
+            vup: Vec3::new(0.0, 1.0, 0.0),
         }
     }
 
@@ -61,9 +67,24 @@ impl Builder {
         self
     }
 
+    pub fn look_from(mut self, look_from: Vec3) -> Self {
+        self.look_from = look_from;
+        self
+    }
+
+    pub fn look_at(mut self, look_at: Vec3) -> Self {
+        self.look_at = look_at;
+        self
+    }
+
+    pub fn vup(mut self, vup: Vec3) -> Self {
+        self.vup = vup;
+        self
+    }
+
     pub fn build(self) -> Camera {
-        let camera_center = vec3::ORIGIN;
-        let focal_length = 1.0;
+        let camera_center = self.look_from;
+        let focal_length = (self.look_from - self.look_at).length();
 
         let height = (self.width as f64 / self.aspect_ratio) as u64;
 
@@ -72,14 +93,18 @@ impl Builder {
         let viewport_height = 2.0 * h * focal_length;
         let viewport_width = viewport_height * (self.width as f64 / height as f64);
 
-        let viewport_u = Vec3::new(viewport_width, 0.0, 0.0);
-        let viewport_v = Vec3::new(0.0, -viewport_height, 0.0);
+        let w = (self.look_from - self.look_at).unit_vector();
+        let u = self.vup.cross(&w).unit_vector();
+        let v = w.cross(&u);
+
+        let viewport_u = u * viewport_width;
+        let viewport_v = (-v) * viewport_height;
 
         let pixel_delta_u = viewport_u / self.width as f64;
         let pixel_delta_v = viewport_v / height as f64;
 
         let viewport_upper_left =
-            camera_center - Vec3::new(0.0, 0.0, focal_length) - (viewport_u + viewport_v) * 0.5;
+            camera_center - w * focal_length - (viewport_u + viewport_v) * 0.5;
 
         let pixel00_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
 
