@@ -54,9 +54,6 @@ fn main() {
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
         .look_at(Vec3::new(0.0, 0.0, -1.0))
         .vertical_fov(40.0)
-        .samples_per_pixel(400)
-        .max_depth(200)
-        .width(4000)
         // .draft()
         .build();
     camera.render_to_file("out.ppm");

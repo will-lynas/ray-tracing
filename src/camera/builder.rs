@@ -26,10 +26,10 @@ impl Builder {
     pub fn new(world: World) -> Self {
         Self {
             world,
-            width: 2000,
+            width: 4000,
             aspect_ratio: 16.0 / 9.0,
-            samples_per_pixel: 200,
-            max_depth: 100,
+            samples_per_pixel: 400,
+            max_depth: 200,
             vertical_fov: 90.0,
             look_from: vec3::ORIGIN,
             look_at: Vec3::new(0.0, 0.0, -1.0),
