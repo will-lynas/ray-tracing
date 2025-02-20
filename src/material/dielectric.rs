@@ -5,6 +5,7 @@ use crate::{
     },
     hittable::HitRecord,
     ray::Ray,
+    rng::ThreadRng,
 };
 
 #[derive(Clone, Copy)]
@@ -29,13 +30,22 @@ impl Dielectric {
         let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
 
         let cannot_refract = refraction_index * sin_theta > 1.0;
-        let refracted = if cannot_refract {
+        let direction = if cannot_refract
+            || Self::reflectance(cos_theta, refraction_index) > ThreadRng::random()
+        {
             unit_direction.reflect(&hit_record.normal)
         } else {
             unit_direction.refract(&hit_record.normal, refraction_index)
         };
 
-        let scattered = Ray::new(hit_record.point, refracted);
+        let scattered = Ray::new(hit_record.point, direction);
         Some((scattered, WHITE))
+    }
+
+    fn reflectance(cosine: f64, refraction_index: f64) -> f64 {
+        // Schlick's approximation for reflectance
+        let r0 = (1.0 - refraction_index) / (1.0 + refraction_index);
+        let r0_squared = r0 * r0;
+        r0_squared + (1.0 - r0_squared) * (1.0 - cosine).powi(5)
     }
 }
