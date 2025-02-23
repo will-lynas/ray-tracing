@@ -25,7 +25,7 @@ where
 impl<I, J> CartesianProduct<I, J>
 where
     I: Iterator,
-    J: Iterator + Clone,
+    J: Clone,
 {
     pub fn new(a: I, b: J) -> Self {
         CartesianProduct {
