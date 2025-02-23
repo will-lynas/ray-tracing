@@ -17,7 +17,8 @@ where
     I: Iterator,
 {
     a: I,
-    a_cur: Option<I::Item>,
+    #[allow(clippy::option_option)]
+    a_cur: Option<Option<I::Item>>,
     b: J,
     b_orig: J,
 }
@@ -47,16 +48,17 @@ where
 
     fn next(&mut self) -> Option<Self::Item> {
         match &self.a_cur {
-            None => match self.a.next() {
-                None => None,
-                Some(a_cur) => {
-                    self.a_cur = Some(a_cur);
-                    self.next()
-                }
-            },
-            Some(a_cur) => match self.b.next() {
+            // Finished
+            Some(None) => None,
+            // Not started
+            None => {
+                self.a_cur = Some(self.a.next());
+                self.next()
+            }
+            // Started
+            Some(Some(a_cur)) => match self.b.next() {
                 None => {
-                    self.a_cur = self.a.next();
+                    self.a_cur = Some(self.a.next());
                     self.b = self.b_orig.clone();
                     self.next()
                 }
