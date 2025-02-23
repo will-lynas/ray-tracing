@@ -12,13 +12,27 @@ pub trait Itertools: Iterator {
 
 impl<T> Itertools for T where T: Iterator {}
 
+enum BaseState<T> {
+    NotStarted,
+    Started(T),
+    Finished,
+}
+
+impl<T> From<Option<T>> for BaseState<T> {
+    fn from(value: Option<T>) -> Self {
+        match value {
+            Some(value) => BaseState::Started(value),
+            None => BaseState::Finished,
+        }
+    }
+}
+
 pub struct CartesianProduct<I, J>
 where
     I: Iterator,
 {
     a: I,
-    #[allow(clippy::option_option)]
-    a_cur: Option<Option<I::Item>>,
+    a_cur: BaseState<I::Item>,
     b: J,
     b_orig: J,
 }
@@ -31,7 +45,7 @@ where
     pub fn new(a: I, b: J) -> Self {
         CartesianProduct {
             a,
-            a_cur: None,
+            a_cur: BaseState::NotStarted,
             b: b.clone(),
             b_orig: b,
         }
@@ -48,17 +62,14 @@ where
 
     fn next(&mut self) -> Option<Self::Item> {
         match &self.a_cur {
-            // Finished
-            Some(None) => None,
-            // Not started
-            None => {
-                self.a_cur = Some(self.a.next());
+            BaseState::Finished => None,
+            BaseState::NotStarted => {
+                self.a_cur = self.a.next().into();
                 self.next()
             }
-            // Started
-            Some(Some(a_cur)) => match self.b.next() {
+            BaseState::Started(a_cur) => match self.b.next() {
                 None => {
-                    self.a_cur = Some(self.a.next());
+                    self.a_cur = self.a.next().into();
                     self.b = self.b_orig.clone();
                     self.next()
                 }
