@@ -12,6 +12,5 @@ pub mod color;
 pub mod hittable;
 pub mod material;
 pub mod ray;
-mod rng;
 pub mod vec3;
 pub mod world;

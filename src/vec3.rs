@@ -6,7 +6,7 @@ use std::ops::{
     Sub,
 };
 
-use crate::rng::ThreadRng;
+use rand::Rng;
 
 pub const ORIGIN: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 
@@ -35,10 +35,11 @@ impl Vec3 {
     }
 
     pub fn random() -> Self {
+        let mut rng = rand::rng();
         Self {
-            x: ThreadRng::random_range(-1.0..1.0),
-            y: ThreadRng::random_range(-1.0..1.0),
-            z: ThreadRng::random_range(-1.0..1.0),
+            x: rng.random_range(-1.0..1.0),
+            y: rng.random_range(-1.0..1.0),
+            z: rng.random_range(-1.0..1.0),
         }
     }
 
@@ -52,10 +53,11 @@ impl Vec3 {
     }
 
     pub fn random_in_unit_disk() -> Self {
+        let mut rng = rand::rng();
         loop {
             let p = Self::new(
-                ThreadRng::random_range(-1.0..1.0),
-                ThreadRng::random_range(-1.0..1.0),
+                rng.random_range(-1.0..1.0),
+                rng.random_range(-1.0..1.0),
                 0.0,
             );
             if p.length_squared() < 1.0 {
