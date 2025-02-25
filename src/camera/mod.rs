@@ -15,6 +15,10 @@ use std::{
 };
 
 pub use builder::Builder;
+use indicatif::{
+    ProgressBar,
+    ProgressIterator,
+};
 use itertools::Itertools;
 
 use crate::{
@@ -23,10 +27,6 @@ use crate::{
         BLACK,
         LIGHT_BLUE,
         WHITE,
-    },
-    progress_bar::{
-        ProgressBar,
-        ProgressBarIter,
     },
     ray::Ray,
     rng::ThreadRng,
@@ -114,18 +114,19 @@ impl Camera {
             .collect();
         drop(tx);
 
-        let mut bar = ProgressBar::new(self.height * self.width);
+        let bar = ProgressBar::new(self.height * self.width);
         let mut result = vec![Color::default(); (self.height * self.width) as usize];
 
         for ((y, x), color) in rx {
             result[(y * self.width + x) as usize] = color;
-            bar.increment();
+            bar.inc(1);
         }
 
         for handle in handles {
             handle.join().unwrap();
         }
 
+        bar.finish_and_clear();
         println!("  Done in {:?}", start.elapsed());
         result
     }

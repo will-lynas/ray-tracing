@@ -11,7 +11,6 @@ pub mod camera;
 pub mod color;
 pub mod hittable;
 pub mod material;
-mod progress_bar;
 pub mod ray;
 mod rng;
 pub mod vec3;
