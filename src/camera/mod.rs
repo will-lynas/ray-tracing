@@ -6,21 +6,14 @@ use std::{
         BufWriter,
         Write,
     },
-    sync::mpsc,
-    thread::{
-        self,
-        available_parallelism,
-    },
     time::Instant,
 };
 
 pub use builder::Builder;
-use indicatif::{
-    ProgressBar,
-    ProgressIterator,
-};
+use indicatif::ProgressIterator;
 use itertools::Itertools;
 use rand::Rng;
+use rayon::prelude::*;
 
 use crate::{
     color::{
@@ -90,43 +83,13 @@ impl Camera {
         println!("Rendering...");
         let start = Instant::now();
 
-        let num_threads = available_parallelism().unwrap().get();
-        let mut batches = vec![Vec::new(); num_threads];
-        for (y, x) in (0..self.height).cartesian_product(0..self.width) {
-            let i = x + y * self.width;
-            let batch_index = i as usize % num_threads;
-            batches[batch_index].push((y, x));
-        }
-
-        let (tx, rx) = mpsc::channel();
-        let handles: Vec<_> = batches
-            .into_iter()
-            .map(|batch| {
-                let tx = tx.clone();
-                let camera = self.clone();
-                thread::spawn(move || {
-                    for (y, x) in batch {
-                        let color = camera.pixel_color(x, y);
-                        tx.send(((y, x), color)).unwrap();
-                    }
-                })
-            })
+        let result = (0..self.height)
+            .cartesian_product(0..self.width)
+            .progress_count(self.height * self.width)
+            .par_bridge()
+            .map(|(y, x)| self.pixel_color(x, y))
             .collect();
-        drop(tx);
 
-        let bar = ProgressBar::new(self.height * self.width);
-        let mut result = vec![Color::default(); (self.height * self.width) as usize];
-
-        for ((y, x), color) in rx {
-            result[(y * self.width + x) as usize] = color;
-            bar.inc(1);
-        }
-
-        for handle in handles {
-            handle.join().unwrap();
-        }
-
-        bar.finish_and_clear();
         println!("  Done in {:?}", start.elapsed());
         result
     }
