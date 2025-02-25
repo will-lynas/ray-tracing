@@ -15,6 +15,7 @@ use std::{
 };
 
 pub use builder::Builder;
+use itertools::Itertools;
 
 use crate::{
     color::{
@@ -23,7 +24,6 @@ use crate::{
         LIGHT_BLUE,
         WHITE,
     },
-    itertools::Itertools,
     progress_bar::{
         ProgressBar,
         ProgressBarIter,
