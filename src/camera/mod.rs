@@ -83,14 +83,19 @@ impl Camera {
         println!("Rendering...");
         let start = Instant::now();
 
-        let result = (0..self.height)
+        let pixels: Vec<_> = (0..self.height)
             .cartesian_product(0..self.width)
             .progress_count(self.height * self.width)
             .par_bridge()
-            .map(|(y, x)| self.pixel_color(x, y))
+            .map(|(y, x)| (x as usize, y as usize, self.pixel_color(x, y)))
             .collect();
 
         println!("  Done in {:?}", start.elapsed());
+
+        let mut result = vec![Color::default(); self.height as usize * self.width as usize];
+        for (x, y, color) in pixels {
+            result[y * self.width as usize + x] = color;
+        }
         result
     }
 
