@@ -1,5 +1,3 @@
-use rand::Rng;
-
 use crate::{
     color::{
         Color,
@@ -7,6 +5,7 @@ use crate::{
     },
     hittable::HitRecord,
     ray::Ray,
+    rng::ThreadRng,
 };
 
 #[derive(Clone, Copy)]
@@ -32,7 +31,7 @@ impl Dielectric {
 
         let cannot_refract = refraction_index * sin_theta > 1.0;
         let direction = if cannot_refract
-            || Self::reflectance(cos_theta, refraction_index) > rand::rng().random()
+            || Self::reflectance(cos_theta, refraction_index) > ThreadRng::random()
         {
             unit_direction.reflect(&hit_record.normal)
         } else {

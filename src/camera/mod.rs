@@ -12,7 +12,6 @@ use std::{
 pub use builder::Builder;
 use indicatif::ProgressIterator;
 use itertools::Itertools;
-use rand::Rng;
 use rayon::prelude::*;
 
 use crate::{
@@ -23,6 +22,7 @@ use crate::{
         WHITE,
     },
     ray::Ray,
+    rng::ThreadRng,
     vec3::Vec3,
     world::World,
 };
@@ -95,9 +95,8 @@ impl Camera {
     }
 
     fn sample_location(&self, x: u64, y: u64) -> Vec3 {
-        let mut rng = rand::rng();
-        let rand_x = rng.random_range(-0.5..0.5);
-        let rand_y = rng.random_range(-0.5..0.5);
+        let rand_x = ThreadRng::random_range(-0.5..0.5);
+        let rand_y = ThreadRng::random_range(-0.5..0.5);
         self.pixel00_loc
             + (self.pixel_delta_u * (x as f64 + rand_x))
             + (self.pixel_delta_v * (y as f64 + rand_y))
