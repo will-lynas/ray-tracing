@@ -3,7 +3,7 @@ use glam::Vec3A as Vec3;
 use crate::{
     color::Color,
     hittable::HitRecord,
-    ray::Ray,
+    timed_ray::TimedRay,
     vec3_ext::Vec3Ext,
 };
 
@@ -19,10 +19,10 @@ impl Metal {
         Self { albedo, fuzz }
     }
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {
+    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let mut reflected = hit_record.in_ray.direction.reflect(hit_record.normal);
         reflected = reflected.normalize() + Vec3::random_unit_vector() * self.fuzz;
-        let scattered = Ray::new(hit_record.point, reflected);
+        let scattered = TimedRay::new(hit_record.point, reflected, hit_record.in_ray.time);
         (scattered.direction.dot(hit_record.normal) > 0.0).then_some((scattered, self.albedo))
     }
 }

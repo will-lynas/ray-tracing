@@ -3,7 +3,7 @@ use glam::Vec3A as Vec3;
 use crate::{
     color::Color,
     hittable::HitRecord,
-    ray::Ray,
+    timed_ray::TimedRay,
     vec3_ext::Vec3Ext,
 };
 
@@ -17,12 +17,12 @@ impl Lambertian {
         Self { albedo }
     }
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {
+    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let mut scatter_direction = hit_record.normal + Vec3::random_unit_vector();
         if scatter_direction.near_zero() {
             scatter_direction = hit_record.normal;
         }
-        let scattered = Ray::new(hit_record.point, scatter_direction);
+        let scattered = TimedRay::new(hit_record.point, scatter_direction, hit_record.in_ray.time);
         Some((scattered, self.albedo))
     }
 }

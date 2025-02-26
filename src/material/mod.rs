@@ -11,7 +11,7 @@ pub use uniform::Uniform;
 use crate::{
     color::Color,
     hittable::HitRecord,
-    ray::Ray,
+    timed_ray::TimedRay,
 };
 
 #[derive(Clone, Copy)]
@@ -23,7 +23,7 @@ pub enum Material {
 }
 
 impl Material {
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {
+    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         match self {
             Material::Lambertian(lambertian) => lambertian.scatter(hit_record),
             Material::Uniform(uniform) => uniform.scatter(hit_record),

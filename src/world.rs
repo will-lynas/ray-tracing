@@ -7,7 +7,7 @@ use crate::{
         Hittable,
     },
     material::Material,
-    ray::Ray,
+    timed_ray::TimedRay,
 };
 
 #[derive(Clone)]
@@ -22,7 +22,7 @@ pub struct World {
 }
 
 impl World {
-    fn hit(&self, r: &Ray, interval: &Range<f32>) -> Option<(HitRecord, Material)> {
+    fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<(HitRecord, Material)> {
         let mut output = None;
         let mut check_interval = interval.clone();
 
@@ -36,7 +36,7 @@ impl World {
         output
     }
 
-    pub fn bounce(&self, r: &Ray, interval: &Range<f32>) -> Option<(Ray, Color)> {
+    pub fn bounce(&self, r: &TimedRay, interval: &Range<f32>) -> Option<(TimedRay, Color)> {
         let (hit_record, material) = self.hit(r, interval)?;
         material.scatter(&hit_record)
     }

@@ -13,5 +13,6 @@ pub mod hittable;
 pub mod material;
 pub mod ray;
 mod rng;
+pub mod timed_ray;
 mod vec3_ext;
 pub mod world;

@@ -32,8 +32,8 @@ use crate::{
         LIGHT_BLUE,
         WHITE,
     },
-    ray::Ray,
     rng::ThreadRng,
+    timed_ray::TimedRay,
     vec3_ext::Vec3Ext,
     world::World,
 };
@@ -93,7 +93,8 @@ impl Camera {
             .map(|_| {
                 let ray_origin = self.sample_ray_origin();
                 let ray_direction = self.sample_location(x, y) - ray_origin;
-                let ray = Ray::new(ray_origin, ray_direction);
+                let ray_time = ThreadRng::random();
+                let ray = TimedRay::new(ray_origin, ray_direction, ray_time);
                 self.color(&ray, self.max_depth)
             })
             .collect();
@@ -138,7 +139,7 @@ impl Camera {
             + (self.pixel_delta_v * (y as f32 + rand_y))
     }
 
-    pub fn color(&self, r: &Ray, depth: usize) -> Color {
+    pub fn color(&self, r: &TimedRay, depth: usize) -> Color {
         if depth == 0 {
             return BLACK;
         }
@@ -151,7 +152,7 @@ impl Camera {
         }
     }
 
-    pub fn background(r: &Ray) -> Color {
+    pub fn background(r: &TimedRay) -> Color {
         let unit_direction = r.direction.normalize();
         let t = 0.5 * (unit_direction.y + 1.0);
         WHITE.lerp(&LIGHT_BLUE, t)

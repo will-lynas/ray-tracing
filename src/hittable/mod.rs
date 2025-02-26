@@ -2,8 +2,7 @@ use std::ops::Range;
 
 use glam::Vec3A as Vec3;
 
-use crate::ray::Ray;
-
+use crate::timed_ray::TimedRay;
 mod sphere;
 pub use sphere::Sphere;
 
@@ -12,11 +11,11 @@ pub struct HitRecord {
     pub normal: Vec3,
     pub t: f32,
     pub front_face: bool,
-    pub in_ray: Ray,
+    pub in_ray: TimedRay,
 }
 
 impl HitRecord {
-    pub fn front_face(normal: Vec3, r: &Ray) -> (bool, Vec3) {
+    pub fn front_face(normal: Vec3, r: &TimedRay) -> (bool, Vec3) {
         let front_face = normal.dot(r.direction) < 0.0;
         let normal = if front_face { normal } else { -normal };
         (front_face, normal)
@@ -29,7 +28,7 @@ pub enum Hittable {
 }
 
 impl Hittable {
-    pub fn hit(&self, r: &Ray, interval: &Range<f32>) -> Option<HitRecord> {
+    pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
         match self {
             Hittable::Sphere(sphere) => sphere.hit(r, interval),
         }

@@ -4,8 +4,8 @@ use crate::{
         WHITE,
     },
     hittable::HitRecord,
-    ray::Ray,
     rng::ThreadRng,
+    timed_ray::TimedRay,
 };
 
 #[derive(Clone, Copy)]
@@ -18,7 +18,7 @@ impl Dielectric {
         Self { refraction_index }
     }
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {
+    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let refraction_index = if hit_record.front_face {
             1.0 / self.refraction_index
         } else {
@@ -38,7 +38,7 @@ impl Dielectric {
             unit_direction.refract(hit_record.normal, refraction_index)
         };
 
-        let scattered = Ray::new(hit_record.point, direction);
+        let scattered = TimedRay::new(hit_record.point, direction, hit_record.in_ray.time);
         Some((scattered, WHITE))
     }
 

@@ -1,7 +1,7 @@
 use crate::{
     color::Color,
     hittable::HitRecord,
-    ray::Ray,
+    timed_ray::TimedRay,
     vec3_ext::Vec3Ext,
 };
 
@@ -15,9 +15,9 @@ impl Uniform {
         Self { albedo }
     }
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {
+    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let scatter_direction = hit_record.normal.random_in_hemisphere();
-        let scattered = Ray::new(hit_record.point, scatter_direction);
+        let scattered = TimedRay::new(hit_record.point, scatter_direction, hit_record.in_ray.time);
         Some((scattered, self.albedo))
     }
 }
