@@ -15,11 +15,11 @@ fn main() {
     let mut world = World::default();
     world.add(
         Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).unwrap(),
-        Lambertian::new(Color::new(0.48, 0.73, 0.2).unwrap()),
+        Lambertian::new(Color::new(0.48, 0.73, 0.2)),
     );
     world.add(
         Sphere::new(Vec3::new(0.0, 0.0, -1.2), 0.5).unwrap(),
-        Lambertian::new(Color::new(0.1, 0.2, 0.5).unwrap()),
+        Lambertian::new(Color::new(0.1, 0.2, 0.5)),
     );
     world.add(
         Sphere::new(Vec3::new(-1.0, 0.0, -0.85), 0.5).unwrap(),
@@ -31,11 +31,11 @@ fn main() {
     );
     world.add(
         Sphere::new(Vec3::new(0.65, -0.25, -0.7), 0.25).unwrap(),
-        Metal::new(Color::new(0.95, 0.95, 0.95).unwrap(), 0.0).unwrap(),
+        Metal::new(Color::new(0.95, 0.95, 0.95), 0.0).unwrap(),
     );
     world.add(
         Sphere::new(Vec3::new(-0.5, -0.25, -2.0), 0.25).unwrap(),
-        Metal::new(Color::new(0.95, 0.6, 0.6).unwrap(), 0.0).unwrap(),
+        Metal::new(Color::new(0.95, 0.6, 0.6), 0.0).unwrap(),
     );
     world.add(
         Sphere::new(Vec3::new(-0.1, -0.15, -0.35), 0.35).unwrap(),
@@ -47,7 +47,7 @@ fn main() {
     );
     world.add(
         Sphere::new(Vec3::new(-0.6, -0.35, -0.4), 0.15).unwrap(),
-        Lambertian::new(Color::new(0.5, 0.0, 0.0).unwrap()),
+        Lambertian::new(Color::new(0.5, 0.0, 0.0)),
     );
 
     let camera = Builder::new(world)

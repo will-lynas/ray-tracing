@@ -81,7 +81,7 @@ impl Camera {
                 self.color(&ray, self.max_depth)
             })
             .collect();
-        Color::average(&samples).unwrap()
+        Color::average(&samples)
     }
 
     pub fn render(&self) -> Vec<Color> {
@@ -138,6 +138,6 @@ impl Camera {
     pub fn background(r: &Ray) -> Color {
         let unit_direction = r.direction.normalize();
         let t = 0.5 * (unit_direction.y + 1.0);
-        WHITE.lerp(&LIGHT_BLUE, t).unwrap()
+        WHITE.lerp(&LIGHT_BLUE, t)
     }
 }
