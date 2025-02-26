@@ -46,7 +46,7 @@ pub struct Camera {
 
 impl Camera {
     pub fn render_to_file(&self) {
-        let buf: Vec<_> = self.render().iter().flat_map(Color::to_rgb8).collect();
+        let buf: Vec<_> = self.render().iter().flat_map(Color::bytes).collect();
         save_buffer(
             "out.png",
             &buf,

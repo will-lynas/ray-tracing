@@ -36,7 +36,7 @@ impl Color {
         Self((n + Vec3::ONE) * 0.5)
     }
 
-    pub fn to_rgb8(&self) -> [u8; 3] {
+    pub fn bytes(&self) -> [u8; 3] {
         [
             (self.0.x.sqrt() * 255.999) as u8,
             (self.0.y.sqrt() * 255.999) as u8,
