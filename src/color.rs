@@ -21,30 +21,30 @@ pub const LIGHT_BLUE: Color = Color::unchecked_new(0.5, 0.7, 1.0);
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Color {
-    r: f64,
-    g: f64,
-    b: f64,
+    r: f32,
+    g: f32,
+    b: f32,
 }
 
 impl Color {
-    pub fn new(r: f64, g: f64, b: f64) -> Option<Self> {
+    pub fn new(r: f32, g: f32, b: f32) -> Option<Self> {
         ((0.0..=1.0).contains(&r) && (0.0..=1.0).contains(&g) && (0.0..=1.0).contains(&b))
             .then_some(Self { r, g, b })
     }
 
-    const fn unchecked_new(r: f64, g: f64, b: f64) -> Self {
+    const fn unchecked_new(r: f32, g: f32, b: f32) -> Self {
         Self { r, g, b }
     }
 
     const fn unchecked_new_u8(r: u8, g: u8, b: u8) -> Self {
         Self {
-            r: r as f64 / 255.0,
-            g: g as f64 / 255.0,
-            b: b as f64 / 255.0,
+            r: r as f32 / 255.0,
+            g: g as f32 / 255.0,
+            b: b as f32 / 255.0,
         }
     }
 
-    pub fn lerp(&self, other: &Self, t: f64) -> Option<Self> {
+    pub fn lerp(&self, other: &Self, t: f32) -> Option<Self> {
         (0.0..=1.0).contains(&t).then_some(
             Self::new(
                 (1.0 - t) * self.r + t * other.r,
@@ -67,13 +67,13 @@ impl Color {
         }
 
         Self::new(
-            r / colors.len() as f64,
-            g / colors.len() as f64,
-            b / colors.len() as f64,
+            r / colors.len() as f32,
+            g / colors.len() as f32,
+            b / colors.len() as f32,
         )
     }
 
-    pub fn mul(&self, s: f64) -> Option<Self> {
+    pub fn mul(&self, s: f32) -> Option<Self> {
         (0.0..=1.0)
             .contains(&s)
             .then_some(Self::new(self.r * s, self.g * s, self.b * s).unwrap())

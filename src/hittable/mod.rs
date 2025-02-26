@@ -11,7 +11,7 @@ pub use sphere::Sphere;
 pub struct HitRecord {
     pub point: Vec3,
     pub normal: Vec3,
-    pub t: f64,
+    pub t: f32,
     pub front_face: bool,
     pub in_ray: Ray,
 }
@@ -30,7 +30,7 @@ pub enum Hittable {
 }
 
 impl Hittable {
-    pub fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord> {
+    pub fn hit(&self, r: &Ray, interval: &Range<f32>) -> Option<HitRecord> {
         match self {
             Hittable::Sphere(sphere) => sphere.hit(r, interval),
         }

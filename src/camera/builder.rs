@@ -1,4 +1,4 @@
-use std::f64::consts::PI;
+use std::f32::consts::PI;
 
 use super::Camera;
 use crate::{
@@ -10,15 +10,15 @@ use crate::{
 pub struct Builder {
     world: World,
     width: u64,
-    aspect_ratio: f64,
+    aspect_ratio: f32,
     samples_per_pixel: u64,
     max_depth: u64,
-    vertical_fov: f64,
+    vertical_fov: f32,
     look_from: Vec3,
     look_at: Vec3,
     vup: Vec3,
-    defocus_angle: f64,
-    focus_dist: f64,
+    defocus_angle: f32,
+    focus_dist: f32,
     quiet: bool,
 }
 
@@ -62,12 +62,12 @@ impl Builder {
         self
     }
 
-    pub fn aspect_ratio(mut self, aspect_ratio: f64) -> Self {
+    pub fn aspect_ratio(mut self, aspect_ratio: f32) -> Self {
         self.aspect_ratio = aspect_ratio;
         self
     }
 
-    pub fn vertical_fov(mut self, vertical_fov: f64) -> Self {
+    pub fn vertical_fov(mut self, vertical_fov: f32) -> Self {
         self.vertical_fov = vertical_fov;
         self
     }
@@ -87,12 +87,12 @@ impl Builder {
         self
     }
 
-    pub fn defocus_angle(mut self, defocus_angle: f64) -> Self {
+    pub fn defocus_angle(mut self, defocus_angle: f32) -> Self {
         self.defocus_angle = defocus_angle;
         self
     }
 
-    pub fn focus_dist(mut self, focus_dist: f64) -> Self {
+    pub fn focus_dist(mut self, focus_dist: f32) -> Self {
         self.focus_dist = focus_dist;
         self
     }
@@ -105,12 +105,12 @@ impl Builder {
     pub fn build(self) -> Camera {
         let camera_center = self.look_from;
 
-        let height = (self.width as f64 / self.aspect_ratio) as u64;
+        let height = (self.width as f32 / self.aspect_ratio) as u64;
 
         let theta = self.vertical_fov * (PI / 180.0);
         let h = (theta / 2.0).tan();
         let viewport_height = 2.0 * h * self.focus_dist;
-        let viewport_width = viewport_height * (self.width as f64 / height as f64);
+        let viewport_width = viewport_height * (self.width as f32 / height as f32);
 
         let w = (self.look_from - self.look_at).unit_vector();
         let u = self.vup.cross(&w).unit_vector();
@@ -119,8 +119,8 @@ impl Builder {
         let viewport_u = u * viewport_width;
         let viewport_v = (-v) * viewport_height;
 
-        let pixel_delta_u = viewport_u / self.width as f64;
-        let pixel_delta_v = viewport_v / height as f64;
+        let pixel_delta_u = viewport_u / self.width as f32;
+        let pixel_delta_v = viewport_v / height as f32;
 
         let viewport_upper_left =
             camera_center - w * self.focus_dist - (viewport_u + viewport_v) * 0.5;

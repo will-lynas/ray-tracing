@@ -8,11 +8,11 @@ use crate::{
 #[derive(Clone, Copy)]
 pub struct Metal {
     albedo: Color,
-    fuzz: f64,
+    fuzz: f32,
 }
 
 impl Metal {
-    pub fn new(albedo: Color, fuzz: f64) -> Option<Self> {
+    pub fn new(albedo: Color, fuzz: f32) -> Option<Self> {
         (0.0..=1.0).contains(&fuzz).then_some(Self { albedo, fuzz })
     }
 

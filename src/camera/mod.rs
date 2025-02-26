@@ -117,8 +117,8 @@ impl Camera {
         let rand_x = ThreadRng::random_range(-0.5..0.5);
         let rand_y = ThreadRng::random_range(-0.5..0.5);
         self.pixel00_loc
-            + (self.pixel_delta_u * (x as f64 + rand_x))
-            + (self.pixel_delta_v * (y as f64 + rand_y))
+            + (self.pixel_delta_u * (x as f32 + rand_x))
+            + (self.pixel_delta_v * (y as f32 + rand_y))
     }
 
     pub fn color(&self, r: &Ray, depth: u64) -> Color {
@@ -126,7 +126,7 @@ impl Camera {
             return BLACK;
         }
 
-        let interval = 0.001..f64::MAX;
+        let interval = 0.001..f32::MAX;
         if let Some((scattered, attenuation)) = self.world.bounce(r, &interval) {
             attenuation * self.color(&scattered, depth - 1)
         } else {

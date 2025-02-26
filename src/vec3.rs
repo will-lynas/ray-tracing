@@ -12,21 +12,21 @@ pub const ORIGIN: Vec3 = Vec3::new(0.0, 0.0, 0.0);
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
-    pub x: f64,
-    pub y: f64,
-    pub z: f64,
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
 impl Vec3 {
-    pub const fn new(x: f64, y: f64, z: f64) -> Self {
+    pub const fn new(x: f32, y: f32, z: f32) -> Self {
         Self { x, y, z }
     }
 
-    pub fn length_squared(&self) -> f64 {
+    pub fn length_squared(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
-    pub fn length(&self) -> f64 {
+    pub fn length(&self) -> f32 {
         self.length_squared().sqrt()
     }
 
@@ -73,7 +73,7 @@ impl Vec3 {
         }
     }
 
-    pub fn dot(&self, other: &Self) -> f64 {
+    pub fn dot(&self, other: &Self) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 
@@ -94,7 +94,7 @@ impl Vec3 {
         *self - *normal * self.dot(normal) * 2.0
     }
 
-    pub fn refract(&self, normal: &Self, etai_over_etat: f64) -> Self {
+    pub fn refract(&self, normal: &Self, etai_over_etat: f32) -> Self {
         let cos_theta = (-*self).dot(normal).min(1.0);
         let r_out_perp = (*self + *normal * cos_theta) * etai_over_etat;
         let r_out_parallel = *normal * -(1.0 - r_out_perp.length_squared()).abs().sqrt();
@@ -138,10 +138,10 @@ impl Neg for Vec3 {
     }
 }
 
-impl Mul<f64> for Vec3 {
+impl Mul<f32> for Vec3 {
     type Output = Vec3;
 
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: f32) -> Self {
         Self {
             x: self.x * rhs,
             y: self.y * rhs,
@@ -150,10 +150,10 @@ impl Mul<f64> for Vec3 {
     }
 }
 
-impl Div<f64> for Vec3 {
+impl Div<f32> for Vec3 {
     type Output = Vec3;
 
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: f32) -> Self {
         Self {
             x: self.x / rhs,
             y: self.y / rhs,

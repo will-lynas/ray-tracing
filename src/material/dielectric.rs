@@ -10,11 +10,11 @@ use crate::{
 
 #[derive(Clone, Copy)]
 pub struct Dielectric {
-    refraction_index: f64,
+    refraction_index: f32,
 }
 
 impl Dielectric {
-    pub fn new(refraction_index: f64) -> Self {
+    pub fn new(refraction_index: f32) -> Self {
         Self { refraction_index }
     }
 
@@ -42,7 +42,7 @@ impl Dielectric {
         Some((scattered, WHITE))
     }
 
-    fn reflectance(cosine: f64, refraction_index: f64) -> f64 {
+    fn reflectance(cosine: f32, refraction_index: f32) -> f32 {
         // Schlick's approximation for reflectance
         let r0 = (1.0 - refraction_index) / (1.0 + refraction_index);
         let r0_squared = r0 * r0;

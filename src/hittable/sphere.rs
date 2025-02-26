@@ -9,15 +9,15 @@ use crate::{
 #[derive(Clone)]
 pub struct Sphere {
     center: Vec3,
-    radius: f64,
+    radius: f32,
 }
 
 impl Sphere {
-    pub fn new(center: Vec3, radius: f64) -> Option<Self> {
+    pub fn new(center: Vec3, radius: f32) -> Option<Self> {
         (radius > 0.0).then_some(Self { center, radius })
     }
 
-    pub fn hit(&self, r: &Ray, interval: &Range<f64>) -> Option<HitRecord> {
+    pub fn hit(&self, r: &Ray, interval: &Range<f32>) -> Option<HitRecord> {
         let oc = self.center - r.origin;
         let a = r.direction.length_squared();
         let h = r.direction.dot(&oc);

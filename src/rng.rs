@@ -38,11 +38,11 @@ impl ThreadRng {
         THREAD_RNG.with(|rng| rng.borrow_mut().next_u32())
     }
 
-    pub fn random() -> f64 {
-        f64::from(Self::next_u32()) / f64::from(u32::MAX)
+    pub fn random() -> f32 {
+        Self::next_u32() as f32 / u32::MAX as f32
     }
 
-    pub fn random_range(range: Range<f64>) -> f64 {
+    pub fn random_range(range: Range<f32>) -> f32 {
         Self::random() * (range.end - range.start) + range.start
     }
 }
