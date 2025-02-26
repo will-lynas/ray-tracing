@@ -1,16 +1,13 @@
 mod builder;
 
-use std::{
-    fs::File,
-    io::{
-        BufWriter,
-        Write,
-    },
-    time::Instant,
-};
+use std::time::Instant;
 
 pub use builder::Builder;
 use glam::Vec3A as Vec3;
+use image::{
+    save_buffer,
+    ColorType,
+};
 use indicatif::{
     ProgressBar,
     ProgressIterator,
@@ -49,23 +46,16 @@ pub struct Camera {
 
 impl Camera {
     pub fn render_to_file(&self) {
-        let colors = self.render();
-        let file_name = "out.ppm";
-
-        println!("Writing to file...");
-        let file = File::create(file_name).unwrap();
-        let mut writer = BufWriter::new(file);
-
-        writeln!(writer, "P3").unwrap();
-        writeln!(writer, "{} {}", self.width, self.height).unwrap();
-        writeln!(writer, "255").unwrap();
-
-        colors
-            .into_iter()
-            .progress_count(self.width * self.height)
-            .for_each(|color| {
-                writeln!(writer, "{color}").unwrap();
-            });
+        let file_name = "out.png";
+        let buf: Vec<_> = self.render().iter().flat_map(Color::to_rgb8).collect();
+        save_buffer(
+            file_name,
+            &buf,
+            self.width as u32,
+            self.height as u32,
+            ColorType::Rgb8,
+        )
+        .unwrap();
     }
 
     fn sample_ray_origin(&self) -> Vec3 {
@@ -105,7 +95,7 @@ impl Camera {
             .collect();
 
         if !self.quiet {
-            println!("  Done in {:?}", start.elapsed());
+            println!("Done in {:?}", start.elapsed());
         }
 
         let mut result = vec![Color::default(); self.height as usize * self.width as usize];

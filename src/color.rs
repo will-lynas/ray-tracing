@@ -1,11 +1,4 @@
-use std::{
-    fmt::{
-        self,
-        Display,
-        Formatter,
-    },
-    ops::Mul,
-};
+use std::ops::Mul;
 
 use glam::Vec3A as Vec3;
 
@@ -42,14 +35,13 @@ impl Color {
     pub fn from_unit_vector(n: Vec3) -> Self {
         Self((n + Vec3::ONE) * 0.5)
     }
-}
 
-impl Display for Color {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        let r = (self.0.x.sqrt() * 255.999) as u8;
-        let g = (self.0.y.sqrt() * 255.999) as u8;
-        let b = (self.0.z.sqrt() * 255.999) as u8;
-        write!(f, "{r} {g} {b}")
+    pub fn to_rgb8(&self) -> [u8; 3] {
+        [
+            (self.0.x.sqrt() * 255.999) as u8,
+            (self.0.y.sqrt() * 255.999) as u8,
+            (self.0.z.sqrt() * 255.999) as u8,
+        ]
     }
 }
 
