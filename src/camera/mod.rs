@@ -48,8 +48,9 @@ pub struct Camera {
 }
 
 impl Camera {
-    pub fn render_to_file(&self, file_name: &str) {
+    pub fn render_to_file(&self) {
         let colors = self.render();
+        let file_name = "out.ppm";
 
         println!("Writing to file...");
         let file = File::create(file_name).unwrap();

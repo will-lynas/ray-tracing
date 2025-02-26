@@ -56,5 +56,5 @@ fn main() {
         .vertical_fov(40.0)
         .draft()
         .build();
-    camera.render_to_file("out.ppm");
+    camera.render_to_file();
 }
