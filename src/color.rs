@@ -7,7 +7,7 @@ use std::{
     ops::Mul,
 };
 
-use crate::vec3::Vec3;
+use glam::Vec3;
 
 pub const BLACK: Color = Color::unchecked_new(0.0, 0.0, 0.0);
 pub const WHITE: Color = Color::unchecked_new(1.0, 1.0, 1.0);

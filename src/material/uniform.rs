@@ -2,6 +2,7 @@ use crate::{
     color::Color,
     hittable::HitRecord,
     ray::Ray,
+    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone, Copy)]

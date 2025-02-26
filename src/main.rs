@@ -1,3 +1,4 @@
+use glam::Vec3;
 use weekend_ray_tracing::{
     camera::Builder,
     color::Color,
@@ -7,7 +8,6 @@ use weekend_ray_tracing::{
         Lambertian,
         Metal,
     },
-    vec3::Vec3,
     world::World,
 };
 

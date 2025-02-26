@@ -1,8 +1,10 @@
+use glam::Vec3;
+
 use crate::{
     color::Color,
     hittable::HitRecord,
     ray::Ray,
-    vec3::Vec3,
+    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone, Copy)]
@@ -17,9 +19,9 @@ impl Metal {
     }
 
     pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {
-        let mut reflected = hit_record.in_ray.direction.reflect(&hit_record.normal);
-        reflected = reflected.unit_vector() + Vec3::random_unit_vector() * self.fuzz;
+        let mut reflected = hit_record.in_ray.direction.reflect(hit_record.normal);
+        reflected = reflected.normalize() + Vec3::random_unit_vector() * self.fuzz;
         let scattered = Ray::new(hit_record.point, reflected);
-        (scattered.direction.dot(&hit_record.normal) > 0.0).then_some((scattered, self.albedo))
+        (scattered.direction.dot(hit_record.normal) > 0.0).then_some((scattered, self.albedo))
     }
 }

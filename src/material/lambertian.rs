@@ -1,8 +1,10 @@
+use glam::Vec3;
+
 use crate::{
     color::Color,
     hittable::HitRecord,
     ray::Ray,
-    vec3::Vec3,
+    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone, Copy)]

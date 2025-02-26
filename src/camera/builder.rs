@@ -1,11 +1,9 @@
 use std::f32::consts::PI;
 
+use glam::Vec3;
+
 use super::Camera;
-use crate::{
-    vec3,
-    vec3::Vec3,
-    world::World,
-};
+use crate::world::World;
 
 pub struct Builder {
     world: World,
@@ -31,7 +29,7 @@ impl Builder {
             samples_per_pixel: 400,
             max_depth: 200,
             vertical_fov: 90.0,
-            look_from: vec3::ORIGIN,
+            look_from: Vec3::ZERO,
             look_at: Vec3::new(0.0, 0.0, -1.0),
             vup: Vec3::new(0.0, 1.0, 0.0),
             defocus_angle: 0.0,
@@ -112,9 +110,9 @@ impl Builder {
         let viewport_height = 2.0 * h * self.focus_dist;
         let viewport_width = viewport_height * (self.width as f32 / height as f32);
 
-        let w = (self.look_from - self.look_at).unit_vector();
-        let u = self.vup.cross(&w).unit_vector();
-        let v = w.cross(&u);
+        let w = (self.look_from - self.look_at).normalize();
+        let u = self.vup.cross(w).normalize();
+        let v = w.cross(u);
 
         let viewport_u = u * viewport_width;
         let viewport_v = (-v) * viewport_height;

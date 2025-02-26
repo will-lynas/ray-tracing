@@ -13,5 +13,5 @@ pub mod hittable;
 pub mod material;
 pub mod ray;
 mod rng;
-pub mod vec3;
+mod vec3_ext;
 pub mod world;

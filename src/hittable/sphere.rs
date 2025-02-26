@@ -1,9 +1,10 @@
 use std::ops::Range;
 
+use glam::Vec3;
+
 use crate::{
     hittable::HitRecord,
     ray::Ray,
-    vec3::Vec3,
 };
 
 #[derive(Clone)]
@@ -20,7 +21,7 @@ impl Sphere {
     pub fn hit(&self, r: &Ray, interval: &Range<f32>) -> Option<HitRecord> {
         let oc = self.center - r.origin;
         let a = r.direction.length_squared();
-        let h = r.direction.dot(&oc);
+        let h = r.direction.dot(oc);
         let c = oc.length_squared() - self.radius * self.radius;
         let discriminant = h * h - a * c;
 

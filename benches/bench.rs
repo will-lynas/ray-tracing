@@ -3,6 +3,7 @@ use criterion::{
     criterion_main,
     Criterion,
 };
+use glam::Vec3;
 use weekend_ray_tracing::{
     camera::{
         Builder,
@@ -11,7 +12,6 @@ use weekend_ray_tracing::{
     color::Color,
     hittable::Sphere,
     material::Lambertian,
-    vec3::Vec3,
     world::World,
 };
 

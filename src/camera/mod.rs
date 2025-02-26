@@ -10,6 +10,7 @@ use std::{
 };
 
 pub use builder::Builder;
+use glam::Vec3;
 use indicatif::{
     ProgressBar,
     ProgressIterator,
@@ -26,7 +27,7 @@ use crate::{
     },
     ray::Ray,
     rng::ThreadRng,
-    vec3::Vec3,
+    vec3_ext::Vec3Ext,
     world::World,
 };
 
@@ -135,7 +136,7 @@ impl Camera {
     }
 
     pub fn background(r: &Ray) -> Color {
-        let unit_direction = r.direction.unit_vector();
+        let unit_direction = r.direction.normalize();
         let t = 0.5 * (unit_direction.y + 1.0);
         WHITE.lerp(&LIGHT_BLUE, t).unwrap()
     }

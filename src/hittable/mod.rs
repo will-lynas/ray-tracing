@@ -1,9 +1,8 @@
 use std::ops::Range;
 
-use crate::{
-    ray::Ray,
-    vec3::Vec3,
-};
+use glam::Vec3;
+
+use crate::ray::Ray;
 
 mod sphere;
 pub use sphere::Sphere;
@@ -18,7 +17,7 @@ pub struct HitRecord {
 
 impl HitRecord {
     pub fn front_face(normal: Vec3, r: &Ray) -> (bool, Vec3) {
-        let front_face = normal.dot(&r.direction) < 0.0;
+        let front_face = normal.dot(r.direction) < 0.0;
         let normal = if front_face { normal } else { -normal };
         (front_face, normal)
     }
