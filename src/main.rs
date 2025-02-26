@@ -84,12 +84,16 @@ fn main() {
         Lambertian::new(Color::new(0.5, 0.0, 0.0)),
     );
 
-    let camera = Builder::new(world)
+    let mut builder = Builder::new(world);
+    builder
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
         .look_at(Vec3::new(0.0, 0.0, -1.0))
         .vertical_fov(40.0);
 
-    let camera = if args.draft { camera.draft() } else { camera }.build();
+    if args.draft {
+        builder.draft();
+    }
 
+    let camera = builder.build();
     camera.render_to_file();
 }
