@@ -31,11 +31,11 @@ fn main() {
     );
 
     // Sphere solid center blue
-    let radius = 0.5;
-    let start = Vec3::new(0.0, 0.0, -1.2);
-    let end = start + Vec3::new(0.0, -1.0, 0.0) * radius * 0.6;
+    let big_sphere_radius = 0.5;
+    let big_sphere_start = Vec3::new(0.0, 0.0, -1.2);
+    let end = big_sphere_start + Vec3::new(0.0, -1.0, 0.0) * big_sphere_radius * 0.6;
     world.add(
-        Sphere::new_start_end(start, end, radius),
+        Sphere::new_start_end(big_sphere_start, end, big_sphere_radius),
         Lambertian::new(Color::new(0.1, 0.2, 0.5)),
     );
 
@@ -87,8 +87,8 @@ fn main() {
     let mut builder = Builder::new(world);
     builder
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
-        .look_at(Vec3::new(0.0, 0.0, -1.0))
-        .vertical_fov(40.0);
+        .look_at(big_sphere_start - Vec3::Y * big_sphere_radius)
+        .vertical_fov(30.0);
 
     if args.draft {
         builder.draft();
