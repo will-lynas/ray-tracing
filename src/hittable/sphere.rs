@@ -25,6 +25,11 @@ impl Sphere {
         Self::new(ray, radius)
     }
 
+    pub fn new_start_end(start: Vec3, end: Vec3, radius: f32) -> Self {
+        let ray = Ray::new(start, end - start);
+        Self::new(ray, radius)
+    }
+
     pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
         let center = self.center.at(r.time);
         let oc = center - r.origin;

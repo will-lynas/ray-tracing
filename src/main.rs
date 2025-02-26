@@ -21,8 +21,11 @@ fn main() {
     );
 
     // Sphere solid center blue
+    let radius = 0.5;
+    let start = Vec3::new(0.0, 0.0, -1.2);
+    let end = start + Vec3::new(0.0, -1.0, 0.0) * radius * 0.4;
     world.add(
-        Sphere::new_static(Vec3::new(0.0, 0.0, -1.2), 0.5),
+        Sphere::new_start_end(start, end, radius),
         Lambertian::new(Color::new(0.1, 0.2, 0.5)),
     );
 
@@ -63,8 +66,11 @@ fn main() {
     );
 
     // Sphere solid red
+    let radius = 0.15;
+    let start = Vec3::new(-0.6, -0.35, -0.4);
+    let end = start + Vec3::new(0.0, 0.0, 1.0) * radius * 0.4;
     world.add(
-        Sphere::new_static(Vec3::new(-0.6, -0.35, -0.4), 0.15),
+        Sphere::new_start_end(start, end, radius),
         Lambertian::new(Color::new(0.5, 0.0, 0.0)),
     );
 
