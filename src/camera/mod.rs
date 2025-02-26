@@ -1,8 +1,18 @@
 mod builder;
 
-use std::time::Instant;
+use std::{
+    fs::{
+        self,
+        create_dir,
+    },
+    time::{
+        Instant,
+        SystemTime,
+    },
+};
 
 pub use builder::Builder;
+use chrono::DateTime;
 use glam::Vec3A as Vec3;
 use image::{
     save_buffer,
@@ -45,16 +55,32 @@ pub struct Camera {
 }
 
 impl Camera {
+    fn get_filename() -> String {
+        let now = SystemTime::now();
+        let datetime = DateTime::<chrono::Local>::from(now);
+        let timestamp = datetime.format("%y%m%d_%H%M%S").to_string();
+        format!("{timestamp}.png")
+    }
+
     pub fn render_to_file(&self) {
+        let prev_filename = "last_run.png";
         let buf: Vec<_> = self.render().iter().flat_map(Color::bytes).collect();
         save_buffer(
-            "out.png",
+            prev_filename,
             &buf,
             self.width as u32,
             self.height as u32,
             ColorType::Rgb8,
         )
         .unwrap();
+
+        let dir = std::path::Path::new("out");
+        if !dir.exists() {
+            create_dir(dir).unwrap();
+        }
+        let filename = Self::get_filename();
+        let path = dir.join(filename);
+        fs::copy(prev_filename, path).unwrap();
     }
 
     fn sample_ray_origin(&self) -> Vec3 {

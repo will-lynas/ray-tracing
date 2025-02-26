@@ -1,3 +1,4 @@
 /target
-out.png
+last_run.png
 .DS_Store
+out/
