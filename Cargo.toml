@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 glam = "0.30.0"
+image = "0.25.5"
 indicatif = "0.17.11"
 itertools = "0.14.0"
 rayon = "1.10.0"
