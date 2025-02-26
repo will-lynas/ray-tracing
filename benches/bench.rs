@@ -18,11 +18,11 @@ use weekend_ray_tracing::{
 fn gen_camera() -> Camera {
     let mut world = World::default();
     world.add(
-        Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).unwrap(),
+        Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0),
         Lambertian::new(Color::new(0.48, 0.73, 0.2)),
     );
     world.add(
-        Sphere::new(Vec3::new(0.0, 0.0, -1.2), 0.5).unwrap(),
+        Sphere::new(Vec3::new(0.0, 0.0, -1.2), 0.5),
         Lambertian::new(Color::new(0.1, 0.2, 0.5)),
     );
     Builder::new(world)

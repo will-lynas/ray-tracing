@@ -14,8 +14,9 @@ pub struct Metal {
 }
 
 impl Metal {
-    pub fn new(albedo: Color, fuzz: f32) -> Option<Self> {
-        (0.0..=1.0).contains(&fuzz).then_some(Self { albedo, fuzz })
+    pub fn new(albedo: Color, fuzz: f32) -> Self {
+        assert!((0.0..=1.0).contains(&fuzz));
+        Self { albedo, fuzz }
     }
 
     pub fn scatter(&self, hit_record: &HitRecord) -> Option<(Ray, Color)> {

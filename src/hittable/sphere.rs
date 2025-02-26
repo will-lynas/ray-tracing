@@ -14,8 +14,9 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new(center: Vec3, radius: f32) -> Option<Self> {
-        (radius > 0.0).then_some(Self { center, radius })
+    pub fn new(center: Vec3, radius: f32) -> Self {
+        assert!(radius > 0.0);
+        Self { center, radius }
     }
 
     pub fn hit(&self, r: &Ray, interval: &Range<f32>) -> Option<HitRecord> {
