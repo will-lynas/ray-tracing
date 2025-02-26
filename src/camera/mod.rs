@@ -31,14 +31,14 @@ use crate::{
 #[derive(Clone)]
 pub struct Camera {
     world: World,
-    width: u64,
-    height: u64,
+    width: usize,
+    height: usize,
     camera_center: Vec3,
     pixel00_loc: Vec3,
     pixel_delta_u: Vec3,
     pixel_delta_v: Vec3,
-    samples_per_pixel: u64,
-    max_depth: u64,
+    samples_per_pixel: usize,
+    max_depth: usize,
     defocus_dist_u: Vec3,
     defocus_dist_v: Vec3,
     quiet: bool,
@@ -62,7 +62,7 @@ impl Camera {
         self.camera_center + self.defocus_dist_u * p.x + self.defocus_dist_v * p.y
     }
 
-    fn pixel_color(&self, x: u64, y: u64) -> Color {
+    fn pixel_color(&self, x: usize, y: usize) -> Color {
         let samples: Vec<_> = (0..self.samples_per_pixel)
             .map(|_| {
                 let ray_origin = self.sample_ray_origin();
@@ -82,7 +82,7 @@ impl Camera {
         let progress_bar = if self.quiet {
             ProgressBar::hidden()
         } else {
-            ProgressBar::new(self.height * self.width)
+            ProgressBar::new((self.height * self.width) as u64)
         };
 
         let start = Instant::now();
@@ -104,7 +104,7 @@ impl Camera {
         result
     }
 
-    fn sample_location(&self, x: u64, y: u64) -> Vec3 {
+    fn sample_location(&self, x: usize, y: usize) -> Vec3 {
         let rand_x = ThreadRng::random_range(-0.5..0.5);
         let rand_y = ThreadRng::random_range(-0.5..0.5);
         self.pixel00_loc
@@ -112,7 +112,7 @@ impl Camera {
             + (self.pixel_delta_v * (y as f32 + rand_y))
     }
 
-    pub fn color(&self, r: &Ray, depth: u64) -> Color {
+    pub fn color(&self, r: &Ray, depth: usize) -> Color {
         if depth == 0 {
             return BLACK;
         }

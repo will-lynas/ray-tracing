@@ -7,10 +7,10 @@ use crate::world::World;
 
 pub struct Builder {
     world: World,
-    width: u64,
+    width: usize,
     aspect_ratio: f32,
-    samples_per_pixel: u64,
-    max_depth: u64,
+    samples_per_pixel: usize,
+    max_depth: usize,
     vertical_fov: f32,
     look_from: Vec3,
     look_at: Vec3,
@@ -45,17 +45,17 @@ impl Builder {
         self
     }
 
-    pub fn samples_per_pixel(mut self, samples_per_pixel: u64) -> Self {
+    pub fn samples_per_pixel(mut self, samples_per_pixel: usize) -> Self {
         self.samples_per_pixel = samples_per_pixel;
         self
     }
 
-    pub fn max_depth(mut self, max_depth: u64) -> Self {
+    pub fn max_depth(mut self, max_depth: usize) -> Self {
         self.max_depth = max_depth;
         self
     }
 
-    pub fn width(mut self, width: u64) -> Self {
+    pub fn width(mut self, width: usize) -> Self {
         self.width = width;
         self
     }
@@ -103,7 +103,7 @@ impl Builder {
     pub fn build(self) -> Camera {
         let camera_center = self.look_from;
 
-        let height = (self.width as f32 / self.aspect_ratio) as u64;
+        let height = (self.width as f32 / self.aspect_ratio) as usize;
 
         let theta = self.vertical_fov * (PI / 180.0);
         let h = (theta / 2.0).tan();
