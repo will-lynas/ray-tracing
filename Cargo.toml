@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.40"
-clap = "4.5.31"
+clap = { version = "4.5.31", features = ["derive"] }
 glam = "0.30.0"
 image = "0.25.5"
 indicatif = "0.17.11"
