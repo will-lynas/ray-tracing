@@ -90,16 +90,16 @@ impl Camera {
             .cartesian_product(0..self.width)
             .progress_with(progress_bar)
             .par_bridge()
-            .map(|(y, x)| (x as usize, y as usize, self.pixel_color(x, y)))
+            .map(|(y, x)| (x, y, self.pixel_color(x, y)))
             .collect();
 
         if !self.quiet {
             println!("Done in {:?}", start.elapsed());
         }
 
-        let mut result = vec![Color::default(); self.height as usize * self.width as usize];
+        let mut result = vec![Color::default(); self.height * self.width];
         for (x, y, color) in pixels {
-            result[y * self.width as usize + x] = color;
+            result[y * self.width + x] = color;
         }
         result
     }
