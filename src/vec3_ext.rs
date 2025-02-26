@@ -1,4 +1,4 @@
-use glam::Vec3;
+use glam::Vec3A as Vec3;
 
 use crate::rng::ThreadRng;
 
@@ -34,11 +34,11 @@ impl Vec3Ext for Vec3 {
     }
 
     fn random() -> Self {
-        Self {
-            x: ThreadRng::random_range(-1.0..1.0),
-            y: ThreadRng::random_range(-1.0..1.0),
-            z: ThreadRng::random_range(-1.0..1.0),
-        }
+        Self::new(
+            ThreadRng::random_range(-1.0..1.0),
+            ThreadRng::random_range(-1.0..1.0),
+            ThreadRng::random_range(-1.0..1.0),
+        )
     }
 
     fn near_zero(&self) -> bool {

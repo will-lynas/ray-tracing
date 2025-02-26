@@ -1,4 +1,4 @@
-use glam::Vec3;
+use glam::Vec3A as Vec3;
 
 #[derive(Clone, Copy)]
 pub struct Ray {

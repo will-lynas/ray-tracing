@@ -10,7 +10,7 @@ use std::{
 };
 
 pub use builder::Builder;
-use glam::Vec3;
+use glam::Vec3A as Vec3;
 use indicatif::{
     ProgressBar,
     ProgressIterator,

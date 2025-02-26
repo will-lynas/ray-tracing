@@ -3,7 +3,7 @@ use criterion::{
     criterion_main,
     Criterion,
 };
-use glam::Vec3;
+use glam::Vec3A as Vec3;
 use weekend_ray_tracing::{
     camera::{
         Builder,

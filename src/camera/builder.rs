@@ -1,6 +1,6 @@
 use std::f32::consts::PI;
 
-use glam::Vec3;
+use glam::Vec3A as Vec3;
 
 use super::Camera;
 use crate::world::World;

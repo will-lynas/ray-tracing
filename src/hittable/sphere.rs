@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use glam::Vec3;
+use glam::Vec3A as Vec3;
 
 use crate::{
     hittable::HitRecord,
