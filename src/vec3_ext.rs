@@ -8,6 +8,7 @@ pub trait Vec3Ext {
     fn random() -> Self;
     fn near_zero(&self) -> bool;
     fn random_in_hemisphere(&self) -> Self;
+    fn refract_custom(&self, normal: Self, etai_over_etat: f32) -> Self;
 }
 
 impl Vec3Ext for Vec3 {
@@ -53,5 +54,12 @@ impl Vec3Ext for Vec3 {
         } else {
             -v
         }
+    }
+
+    fn refract_custom(&self, normal: Self, etai_over_etat: f32) -> Self {
+        let cos_theta = (-*self).dot(normal).min(1.0);
+        let r_out_perp = (*self + normal * cos_theta) * etai_over_etat;
+        let r_out_parallel = normal * -(1.0 - r_out_perp.length_squared()).abs().sqrt();
+        r_out_perp + r_out_parallel
     }
 }

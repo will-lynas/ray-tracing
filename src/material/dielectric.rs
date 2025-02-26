@@ -6,6 +6,7 @@ use crate::{
     hittable::HitRecord,
     rng::ThreadRng,
     timed_ray::TimedRay,
+    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone, Copy)]
@@ -35,7 +36,7 @@ impl Dielectric {
         {
             unit_direction.reflect(hit_record.normal)
         } else {
-            unit_direction.refract(hit_record.normal, refraction_index)
+            unit_direction.refract_custom(hit_record.normal, refraction_index)
         };
 
         let scattered = TimedRay::new(hit_record.point, direction, hit_record.in_ray.time);
