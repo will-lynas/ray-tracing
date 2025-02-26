@@ -1,3 +1,4 @@
+use clap::Parser;
 use glam::Vec3A as Vec3;
 use ray_tracing::{
     camera::Builder,
@@ -11,7 +12,16 @@ use ray_tracing::{
     world::World,
 };
 
+#[derive(Parser)]
+struct Args {
+    /// Enable draft mode for faster rendering
+    #[arg(short, long)]
+    draft: bool,
+}
+
 fn main() {
+    let args = Args::parse();
+
     let mut world = World::default();
 
     // Ground
@@ -77,8 +87,9 @@ fn main() {
     let camera = Builder::new(world)
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
         .look_at(Vec3::new(0.0, 0.0, -1.0))
-        .vertical_fov(40.0)
-        .draft()
-        .build();
+        .vertical_fov(40.0);
+
+    let camera = if args.draft { camera.draft() } else { camera }.build();
+
     camera.render_to_file();
 }
