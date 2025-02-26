@@ -1,5 +1,5 @@
 use glam::Vec3A as Vec3;
-use weekend_ray_tracing::{
+use ray_tracing::{
     camera::Builder,
     color::Color,
     hittable::Sphere,

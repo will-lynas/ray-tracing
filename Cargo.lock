@@ -988,6 +988,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ray-tracing"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "criterion",
+ "glam",
+ "image",
+ "indicatif",
+ "itertools 0.14.0",
+ "rayon",
+]
+
+[[package]]
 name = "rayon"
 version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1357,19 +1370,6 @@ checksum = "5a6580f308b1fad9207618087a65c04e7a10bc77e02c8e84e9b00dd4b12fa0bb"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
-]
-
-[[package]]
-name = "weekend-ray-tracing"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "criterion",
- "glam",
- "image",
- "indicatif",
- "itertools 0.14.0",
- "rayon",
 ]
 
 [[package]]
