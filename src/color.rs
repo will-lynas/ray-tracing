@@ -38,10 +38,14 @@ impl Color {
 
     pub fn bytes(&self) -> [u8; 3] {
         [
-            (self.0.x.sqrt() * 255.999) as u8,
-            (self.0.y.sqrt() * 255.999) as u8,
-            (self.0.z.sqrt() * 255.999) as u8,
+            Self::float_to_u8(self.0.x),
+            Self::float_to_u8(self.0.y),
+            Self::float_to_u8(self.0.z),
         ]
+    }
+
+    fn float_to_u8(f: f32) -> u8 {
+        (f.sqrt() * 256.0).clamp(0.0, 256.0) as u8
     }
 }
 
