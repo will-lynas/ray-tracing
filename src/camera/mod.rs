@@ -10,7 +10,10 @@ use std::{
 };
 
 pub use builder::Builder;
-use indicatif::ProgressIterator;
+use indicatif::{
+    ProgressBar,
+    ProgressIterator,
+};
 use itertools::Itertools;
 use rayon::prelude::*;
 
@@ -40,6 +43,7 @@ pub struct Camera {
     max_depth: u64,
     defocus_dist_u: Vec3,
     defocus_dist_v: Vec3,
+    quiet: bool,
 }
 
 impl Camera {
@@ -80,17 +84,27 @@ impl Camera {
     }
 
     pub fn render(&self) -> Vec<Color> {
-        println!("Rendering...");
-        let start = Instant::now();
+        if !self.quiet {
+            println!("Rendering...");
+        }
 
+        let progress_bar = if self.quiet {
+            ProgressBar::hidden()
+        } else {
+            ProgressBar::new(self.height * self.width)
+        };
+
+        let start = Instant::now();
         let pixels: Vec<_> = (0..self.height)
             .cartesian_product(0..self.width)
-            .progress_count(self.height * self.width)
+            .progress_with(progress_bar)
             .par_bridge()
             .map(|(y, x)| (x as usize, y as usize, self.pixel_color(x, y)))
             .collect();
 
-        println!("  Done in {:?}", start.elapsed());
+        if !self.quiet {
+            println!("  Done in {:?}", start.elapsed());
+        }
 
         let mut result = vec![Color::default(); self.height as usize * self.width as usize];
         for (x, y, color) in pixels {

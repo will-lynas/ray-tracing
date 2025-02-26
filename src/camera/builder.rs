@@ -19,6 +19,7 @@ pub struct Builder {
     vup: Vec3,
     defocus_angle: f64,
     focus_dist: f64,
+    quiet: bool,
 }
 
 impl Builder {
@@ -35,6 +36,7 @@ impl Builder {
             vup: Vec3::new(0.0, 1.0, 0.0),
             defocus_angle: 0.0,
             focus_dist: 10.0,
+            quiet: false,
         }
     }
 
@@ -95,6 +97,11 @@ impl Builder {
         self
     }
 
+    pub fn quiet(mut self, quiet: bool) -> Self {
+        self.quiet = quiet;
+        self
+    }
+
     pub fn build(self) -> Camera {
         let camera_center = self.look_from;
 
@@ -137,6 +144,7 @@ impl Builder {
             max_depth: self.max_depth,
             defocus_dist_u,
             defocus_dist_v,
+            quiet: self.quiet,
         }
     }
 }
