@@ -30,8 +30,10 @@ impl BvhNode {
     pub fn new(_objects: Vec<Box<dyn Hittable>>) -> Self {
         todo!()
     }
+}
 
-    pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
+impl Hittable for BvhNode {
+    fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
         if !self.bounding_box.hit(r, interval) {
             return None;
         }
@@ -51,5 +53,9 @@ impl BvhNode {
                 }
             }
         }
+    }
+
+    fn bounding_box(&self) -> Aabb {
+        self.bounding_box.clone()
     }
 }
