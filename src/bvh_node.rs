@@ -23,11 +23,11 @@ pub struct BvhNode {
 }
 
 impl BvhNode {
-    pub fn new_from_list(_world: &HittableList) -> Self {
-        todo!()
+    pub fn from_list(list: HittableList) -> Self {
+        Self::new(list.objects)
     }
 
-    pub fn new_from_objects(_objects: Vec<Box<dyn Hittable>>) -> Self {
+    pub fn new(_objects: Vec<Box<dyn Hittable>>) -> Self {
         todo!()
     }
 
