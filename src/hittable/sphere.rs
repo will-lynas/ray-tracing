@@ -2,6 +2,7 @@ use std::ops::Range;
 
 use glam::Vec3A as Vec3;
 
+use super::Hittable;
 use crate::{
     aabb::Aabb,
     hittable::HitRecord,
@@ -15,7 +16,7 @@ pub struct Sphere {
     center: Ray,
     radius: f32,
     material: Material,
-    pub bounding_box: Aabb,
+    bounding_box: Aabb,
 }
 
 impl Sphere {
@@ -46,8 +47,10 @@ impl Sphere {
         let ray = Ray::new(start, end - start);
         Self::new(ray, radius, material)
     }
+}
 
-    pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
+impl Hittable for Sphere {
+    fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
         let center = self.center.at(r.time);
         let oc = center - r.origin;
         let a = r.direction.length_squared();
@@ -84,5 +87,9 @@ impl Sphere {
             in_ray: *r,
             material: self.material,
         })
+    }
+
+    fn bounding_box(&self) -> Aabb {
+        self.bounding_box.clone()
     }
 }

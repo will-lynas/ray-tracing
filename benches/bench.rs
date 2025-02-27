@@ -19,16 +19,16 @@ use ray_tracing::{
 
 fn gen_camera() -> Camera {
     let mut world = HittableList::default();
-    world.add(Sphere::new_static(
+    world.add(Box::new(Sphere::new_static(
         Vec3::new(0.0, -100.5, -1.0),
         100.0,
         Lambertian::new(Color::new(0.48, 0.73, 0.2)),
-    ));
-    world.add(Sphere::new_static(
+    )));
+    world.add(Box::new(Sphere::new_static(
         Vec3::new(0.0, 0.0, -1.2),
         0.5,
         Lambertian::new(Color::new(0.1, 0.2, 0.5)),
-    ));
+    )));
     Builder::new(world)
         .samples_per_pixel(10)
         .width(100)

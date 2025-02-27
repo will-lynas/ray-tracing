@@ -12,7 +12,7 @@ use crate::{
 
 #[derive(Default)]
 pub struct List {
-    pub objects: Vec<Hittable>,
+    pub objects: Vec<Box<dyn Hittable>>,
     bounding_box: Option<Aabb>,
 }
 
@@ -36,9 +36,7 @@ impl List {
         hit_record.material.scatter(&hit_record)
     }
 
-    pub fn add(&mut self, hittable: impl Into<Hittable>) {
-        let hittable = hittable.into();
-
+    pub fn add(&mut self, hittable: Box<dyn Hittable>) {
         self.bounding_box = if let Some(bounding_box) = &self.bounding_box {
             Some(bounding_box.merge(&hittable.bounding_box()))
         } else {

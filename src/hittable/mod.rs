@@ -29,27 +29,7 @@ impl HitRecord {
     }
 }
 
-#[derive(Clone)]
-pub enum Hittable {
-    Sphere(Sphere),
-}
-
-impl Hittable {
-    pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
-        match self {
-            Hittable::Sphere(sphere) => sphere.hit(r, interval),
-        }
-    }
-
-    pub fn bounding_box(&self) -> Aabb {
-        match self {
-            Hittable::Sphere(sphere) => sphere.bounding_box.clone(),
-        }
-    }
-}
-
-impl From<Sphere> for Hittable {
-    fn from(sphere: Sphere) -> Self {
-        Self::Sphere(sphere)
-    }
+pub trait Hittable: Sync {
+    fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord>;
+    fn bounding_box(&self) -> Aabb;
 }

@@ -13,8 +13,8 @@ use crate::{
 };
 
 enum Children {
-    One(Hittable),
-    Two(Hittable, Hittable),
+    One(Box<dyn Hittable>),
+    Two(Box<dyn Hittable>, Box<dyn Hittable>),
 }
 
 pub struct BvhNode {
@@ -27,7 +27,7 @@ impl BvhNode {
         todo!()
     }
 
-    pub fn new_from_objects(_objects: &[Hittable]) -> Self {
+    pub fn new_from_objects(_objects: &[Box<dyn Hittable>]) -> Self {
         todo!()
     }
 
