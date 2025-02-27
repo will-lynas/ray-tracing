@@ -9,7 +9,7 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct List {
     pub objects: Vec<Box<dyn Hittable>>,
     bounding_box: Aabb,

@@ -8,6 +8,7 @@ use crate::{
     timed_ray::TimedRay,
 };
 
+#[derive(Debug)]
 pub struct Metal {
     albedo: Color,
     fuzz: f32,

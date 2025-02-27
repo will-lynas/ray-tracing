@@ -1,4 +1,7 @@
-use std::ops::Range;
+use std::{
+    fmt::Debug,
+    ops::Range,
+};
 
 use glam::Vec3A as Vec3;
 
@@ -29,7 +32,7 @@ impl HitRecord<'_> {
     }
 }
 
-pub trait Hittable: Sync {
+pub trait Hittable: Sync + Debug {
     fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord>;
     fn bounding_box(&self) -> Aabb;
 }

@@ -12,11 +12,13 @@ use crate::{
     timed_ray::TimedRay,
 };
 
+#[derive(Debug)]
 enum Children {
     One(Box<dyn Hittable>),
     Two(Box<dyn Hittable>, Box<dyn Hittable>),
 }
 
+#[derive(Debug)]
 pub struct BvhNode {
     children: Children,
     bounding_box: Aabb,

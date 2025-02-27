@@ -3,6 +3,8 @@ mod lambertian;
 mod metal;
 mod uniform;
 
+use std::fmt::Debug;
+
 pub use dielectric::Dielectric;
 pub use lambertian::Lambertian;
 pub use metal::Metal;
@@ -14,6 +16,6 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-pub trait Material: Sync {
+pub trait Material: Sync + Debug {
     fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)>;
 }
