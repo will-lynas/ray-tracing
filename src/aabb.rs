@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use std::{
     mem::swap,
     ops::Range,
@@ -8,10 +6,12 @@ use std::{
 use glam::Vec3A as Vec3;
 
 use crate::{
+    range_ext::RangeExt,
     timed_ray::TimedRay,
     vec3_ext::Vec3Ext,
 };
 
+#[derive(Clone)]
 pub struct Aabb {
     x: Range<f32>,
     y: Range<f32>,
@@ -58,5 +58,13 @@ impl Aabb {
             }
         }
         true
+    }
+
+    pub fn merge(&self, other: &Self) -> Self {
+        Self {
+            x: self.x.merge(&other.x),
+            y: self.y.merge(&other.y),
+            z: self.z.merge(&other.z),
+        }
     }
 }

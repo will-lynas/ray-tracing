@@ -1,6 +1,7 @@
 use std::ops::Range;
 
 use crate::{
+    aabb::Aabb,
     color::Color,
     hittable::{
         HitRecord,
@@ -19,6 +20,7 @@ pub struct Object {
 #[derive(Default, Clone)]
 pub struct World {
     pub objects: Vec<Object>,
+    bounding_box: Option<Aabb>,
 }
 
 impl World {
@@ -42,9 +44,15 @@ impl World {
     }
 
     pub fn add(&mut self, hittable: impl Into<Hittable>, material: impl Into<Material>) {
-        self.objects.push(Object {
-            hittable: hittable.into(),
-            material: material.into(),
-        });
+        let hittable = hittable.into();
+        let material = material.into();
+
+        self.bounding_box = if let Some(bounding_box) = &self.bounding_box {
+            Some(bounding_box.merge(&hittable.bounding_box()))
+        } else {
+            Some(hittable.bounding_box())
+        };
+
+        self.objects.push(Object { hittable, material });
     }
 }

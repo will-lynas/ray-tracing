@@ -3,6 +3,7 @@ use std::ops::Range;
 use glam::Vec3A as Vec3;
 
 use crate::{
+    aabb::Aabb,
     hittable::HitRecord,
     ray::Ray,
     timed_ray::TimedRay,
@@ -12,12 +13,20 @@ use crate::{
 pub struct Sphere {
     center: Ray,
     radius: f32,
+    pub bounding_box: Aabb,
 }
 
 impl Sphere {
     pub fn new(center: Ray, radius: f32) -> Self {
         assert!(radius > 0.0);
-        Self { center, radius }
+        let box0 = Aabb::new(center.at(0.0) - radius, center.at(0.0) + radius);
+        let box1 = Aabb::new(center.at(1.0) - radius, center.at(1.0) + radius);
+        let bounding_box = box0.merge(&box1);
+        Self {
+            center,
+            radius,
+            bounding_box,
+        }
     }
 
     pub fn new_static(center: Vec3, radius: f32) -> Self {

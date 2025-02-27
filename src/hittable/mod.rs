@@ -2,7 +2,10 @@ use std::ops::Range;
 
 use glam::Vec3A as Vec3;
 
-use crate::timed_ray::TimedRay;
+use crate::{
+    aabb::Aabb,
+    timed_ray::TimedRay,
+};
 mod sphere;
 pub use sphere::Sphere;
 
@@ -31,6 +34,12 @@ impl Hittable {
     pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
         match self {
             Hittable::Sphere(sphere) => sphere.hit(r, interval),
+        }
+    }
+
+    pub fn bounding_box(&self) -> Aabb {
+        match self {
+            Hittable::Sphere(sphere) => sphere.bounding_box.clone(),
         }
     }
 }

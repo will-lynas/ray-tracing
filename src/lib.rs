@@ -12,6 +12,7 @@ pub mod camera;
 pub mod color;
 pub mod hittable;
 pub mod material;
+mod range_ext;
 mod ray;
 mod rng;
 mod timed_ray;
