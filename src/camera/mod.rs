@@ -38,7 +38,6 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Clone)]
 pub struct Camera {
     world: HittableList,
     width: usize,
