@@ -10,7 +10,7 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 pub struct List {
     pub objects: Vec<Hittable>,
     bounding_box: Option<Aabb>,
