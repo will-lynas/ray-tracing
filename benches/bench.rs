@@ -10,13 +10,15 @@ use ray_tracing::{
         Camera,
     },
     color::Color,
-    hittable::Sphere,
+    hittable::{
+        HittableList,
+        Sphere,
+    },
     material::Lambertian,
-    world::World,
 };
 
 fn gen_camera() -> Camera {
-    let mut world = World::default();
+    let mut world = HittableList::default();
     world.add(
         Sphere::new_static(Vec3::new(0.0, -100.5, -1.0), 100.0),
         Lambertian::new(Color::new(0.48, 0.73, 0.2)),

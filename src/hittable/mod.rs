@@ -6,7 +6,9 @@ use crate::{
     aabb::Aabb,
     timed_ray::TimedRay,
 };
+mod list;
 mod sphere;
+pub use list::List as HittableList;
 pub use sphere::Sphere;
 
 pub struct HitRecord {

@@ -33,14 +33,14 @@ use crate::{
         WHITE,
     },
     extension_traits::Vec3Ext,
+    hittable::HittableList,
     rng::ThreadRng,
     timed_ray::TimedRay,
-    world::World,
 };
 
 #[derive(Clone)]
 pub struct Camera {
-    world: World,
+    world: HittableList,
     width: usize,
     height: usize,
     camera_center: Vec3,

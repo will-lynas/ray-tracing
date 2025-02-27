@@ -13,12 +13,12 @@ use crate::{
 };
 
 #[derive(Default, Clone)]
-pub struct World {
+pub struct List {
     pub objects: Vec<Object>,
     bounding_box: Option<Aabb>,
 }
 
-impl World {
+impl List {
     fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<(HitRecord, Material)> {
         let mut output = None;
         let mut check_interval = interval.clone();

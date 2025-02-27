@@ -3,13 +3,15 @@ use glam::Vec3A as Vec3;
 use ray_tracing::{
     camera::Builder,
     color::Color,
-    hittable::Sphere,
+    hittable::{
+        HittableList,
+        Sphere,
+    },
     material::{
         Dielectric,
         Lambertian,
         Metal,
     },
-    world::World,
 };
 
 #[derive(Parser)]
@@ -22,7 +24,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let mut world = World::default();
+    let mut world = HittableList::default();
 
     // Ground
     world.add(

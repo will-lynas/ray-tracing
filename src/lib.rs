@@ -17,4 +17,3 @@ mod object;
 mod ray;
 mod rng;
 mod timed_ray;
-pub mod world;
