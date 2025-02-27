@@ -12,22 +12,22 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-enum Children {
-    One(Box<dyn Hittable>),
-    Two(Box<dyn Hittable>, Box<dyn Hittable>),
+enum Children<'a> {
+    One(&'a dyn Hittable),
+    Two(&'a dyn Hittable, &'a dyn Hittable),
 }
 
-pub struct BvhNode {
-    children: Children,
+pub struct BvhNode<'a> {
+    children: Children<'a>,
     bounding_box: Aabb,
 }
 
-impl BvhNode {
+impl<'a> BvhNode<'a> {
     pub fn new_from_list(_world: &HittableList) -> Self {
         todo!()
     }
 
-    pub fn new_from_objects(_objects: &[Box<dyn Hittable>]) -> Self {
+    pub fn new_from_objects(_objects: &[&'a dyn Hittable]) -> Self {
         todo!()
     }
 
