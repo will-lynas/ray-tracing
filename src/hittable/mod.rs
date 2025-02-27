@@ -4,6 +4,7 @@ use glam::Vec3A as Vec3;
 
 use crate::{
     aabb::Aabb,
+    material::Material,
     timed_ray::TimedRay,
 };
 mod list;
@@ -17,6 +18,7 @@ pub struct HitRecord {
     pub t: f32,
     pub front_face: bool,
     pub in_ray: TimedRay,
+    pub material: Material,
 }
 
 impl HitRecord {

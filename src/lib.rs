@@ -13,7 +13,6 @@ pub mod color;
 mod extension_traits;
 pub mod hittable;
 pub mod material;
-mod object;
 mod ray;
 mod rng;
 mod timed_ray;

@@ -5,6 +5,7 @@ use glam::Vec3A as Vec3;
 use crate::{
     aabb::Aabb,
     hittable::HitRecord,
+    material::Material,
     ray::Ray,
     timed_ray::TimedRay,
 };
@@ -13,11 +14,12 @@ use crate::{
 pub struct Sphere {
     center: Ray,
     radius: f32,
+    material: Material,
     pub bounding_box: Aabb,
 }
 
 impl Sphere {
-    pub fn new(center: Ray, radius: f32) -> Self {
+    pub fn new(center: Ray, radius: f32, material: impl Into<Material>) -> Self {
         assert!(radius > 0.0);
         let box0 = Aabb::new(center.at(0.0) - radius, center.at(0.0) + radius);
         let box1 = Aabb::new(center.at(1.0) - radius, center.at(1.0) + radius);
@@ -25,18 +27,24 @@ impl Sphere {
         Self {
             center,
             radius,
+            material: material.into(),
             bounding_box,
         }
     }
 
-    pub fn new_static(center: Vec3, radius: f32) -> Self {
+    pub fn new_static(center: Vec3, radius: f32, material: impl Into<Material>) -> Self {
         let ray = Ray::new(center, Vec3::ZERO);
-        Self::new(ray, radius)
+        Self::new(ray, radius, material)
     }
 
-    pub fn new_start_end(start: Vec3, end: Vec3, radius: f32) -> Self {
+    pub fn new_start_end(
+        start: Vec3,
+        end: Vec3,
+        radius: f32,
+        material: impl Into<Material>,
+    ) -> Self {
         let ray = Ray::new(start, end - start);
-        Self::new(ray, radius)
+        Self::new(ray, radius, material)
     }
 
     pub fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
@@ -74,6 +82,7 @@ impl Sphere {
             t,
             front_face,
             in_ray: *r,
+            material: self.material,
         })
     }
 }
