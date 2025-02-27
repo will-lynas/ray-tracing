@@ -27,8 +27,30 @@ impl BvhNode {
         Self::new(list.objects)
     }
 
-    pub fn new(_objects: Vec<Box<dyn Hittable>>) -> Self {
-        todo!()
+    pub fn new(mut objects: Vec<Box<dyn Hittable>>) -> Self {
+        let children = match objects.len() {
+            0 => panic!("No objects to create BVH node from"),
+            1 => Children::One(objects.remove(0)),
+            2 => Children::Two(objects.remove(0), objects.remove(0)),
+            _ => {
+                let comparator = Aabb::random_axis_comparator();
+                objects.sort_by(comparator);
+                let mid = objects.len() / 2;
+                let left = Self::new(objects.drain(..mid).collect());
+                let right = Self::new(objects);
+                Children::Two(Box::new(left), Box::new(right))
+            }
+        };
+
+        let bounding_box = match &children {
+            Children::One(hittable) => hittable.bounding_box(),
+            Children::Two(left, right) => left.bounding_box().merge(&right.bounding_box()),
+        };
+
+        Self {
+            children,
+            bounding_box,
+        }
     }
 }
 

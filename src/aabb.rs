@@ -1,4 +1,5 @@
 use std::{
+    cmp::Ordering,
     mem::swap,
     ops::Range,
 };
@@ -10,6 +11,8 @@ use crate::{
         RangeExt,
         Vec3Ext,
     },
+    hittable::Hittable,
+    rng::ThreadRng,
     timed_ray::TimedRay,
 };
 
@@ -35,6 +38,20 @@ impl Aabb {
             1 => self.y.clone(),
             2 => self.z.clone(),
             _ => panic!("Invalid axis"),
+        }
+    }
+
+    pub fn random_axis_comparator() -> impl FnMut(&Box<dyn Hittable>, &Box<dyn Hittable>) -> Ordering
+    {
+        let axis = (ThreadRng::next_u32() % 3) as usize;
+        move |a, b| {
+            let a_box = a.bounding_box();
+            let b_box = b.bounding_box();
+            a_box
+                .axis(axis)
+                .start
+                .partial_cmp(&b_box.axis(axis).start)
+                .unwrap()
         }
     }
 
