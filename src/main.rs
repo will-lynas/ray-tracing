@@ -97,14 +97,13 @@ fn main() {
         Lambertian::new(Color::new(0.5, 0.0, 0.0)),
     ));
 
-    let mut builder = Builder::new(world);
-    builder
+    let mut builder = Builder::new(world)
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
         .look_at(big_sphere_start - Vec3::Y * big_sphere_radius)
         .vertical_fov(30.0);
 
     if args.draft {
-        builder.draft();
+        builder = builder.draft();
     }
 
     let camera = builder.build();

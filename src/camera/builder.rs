@@ -38,69 +38,69 @@ impl Builder {
         }
     }
 
-    pub fn draft(&mut self) -> &mut Self {
+    pub fn draft(mut self) -> Self {
         self.width = 400;
         self.samples_per_pixel = 100;
         self.max_depth = 20;
         self
     }
 
-    pub fn samples_per_pixel(&mut self, samples_per_pixel: usize) -> &mut Self {
+    pub fn samples_per_pixel(mut self, samples_per_pixel: usize) -> Self {
         self.samples_per_pixel = samples_per_pixel;
         self
     }
 
-    pub fn max_depth(&mut self, max_depth: usize) -> &mut Self {
+    pub fn max_depth(mut self, max_depth: usize) -> Self {
         self.max_depth = max_depth;
         self
     }
 
-    pub fn width(&mut self, width: usize) -> &mut Self {
+    pub fn width(mut self, width: usize) -> Self {
         self.width = width;
         self
     }
 
-    pub fn aspect_ratio(&mut self, aspect_ratio: f32) -> &mut Self {
+    pub fn aspect_ratio(mut self, aspect_ratio: f32) -> Self {
         self.aspect_ratio = aspect_ratio;
         self
     }
 
-    pub fn vertical_fov(&mut self, vertical_fov: f32) -> &mut Self {
+    pub fn vertical_fov(mut self, vertical_fov: f32) -> Self {
         self.vertical_fov = vertical_fov;
         self
     }
 
-    pub fn look_from(&mut self, look_from: Vec3) -> &mut Self {
+    pub fn look_from(mut self, look_from: Vec3) -> Self {
         self.look_from = look_from;
         self
     }
 
-    pub fn look_at(&mut self, look_at: Vec3) -> &mut Self {
+    pub fn look_at(mut self, look_at: Vec3) -> Self {
         self.look_at = look_at;
         self
     }
 
-    pub fn vup(&mut self, vup: Vec3) -> &mut Self {
+    pub fn vup(mut self, vup: Vec3) -> Self {
         self.vup = vup;
         self
     }
 
-    pub fn defocus_angle(&mut self, defocus_angle: f32) -> &mut Self {
+    pub fn defocus_angle(mut self, defocus_angle: f32) -> Self {
         self.defocus_angle = defocus_angle;
         self
     }
 
-    pub fn focus_dist(&mut self, focus_dist: f32) -> &mut Self {
+    pub fn focus_dist(mut self, focus_dist: f32) -> Self {
         self.focus_dist = focus_dist;
         self
     }
 
-    pub fn quiet(&mut self, quiet: bool) -> &mut Self {
+    pub fn quiet(mut self, quiet: bool) -> Self {
         self.quiet = quiet;
         self
     }
 
-    pub fn build(&self) -> Camera {
+    pub fn build(self) -> Camera {
         let camera_center = self.look_from;
 
         let height = (self.width as f32 / self.aspect_ratio) as usize;
@@ -131,7 +131,7 @@ impl Builder {
         let defocus_dist_v = v * defocus_radius;
 
         Camera {
-            world: self.world.clone(),
+            world: self.world,
             width: self.width,
             height,
             camera_center,
