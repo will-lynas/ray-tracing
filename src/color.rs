@@ -13,7 +13,7 @@ pub const TURQUOISE: Color = Color::new_u8(175, 238, 238);
 pub const LIGHT_BLUE: Color = Color::new(0.5, 0.7, 1.0);
 
 #[derive(Debug, Clone, Copy, Default)]
-pub struct Color(Vec3);
+pub struct Color(pub Vec3);
 
 impl Color {
     pub const fn new(r: f32, g: f32, b: f32) -> Self {

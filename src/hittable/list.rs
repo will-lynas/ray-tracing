@@ -16,9 +16,9 @@ pub struct List {
 }
 
 impl List {
-    pub fn add(&mut self, hittable: Box<dyn Hittable>) {
+    pub fn add(&mut self, hittable: impl Hittable + 'static) {
         self.bounding_box = self.bounding_box.merge(&hittable.bounding_box());
-        self.objects.push(hittable);
+        self.objects.push(Box::new(hittable));
     }
 }
 

@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use glam::Vec3A as Vec3;
 
 use crate::rng::ThreadRng;
@@ -6,6 +8,7 @@ pub trait Vec3Ext {
     fn random_in_unit_disk() -> Self;
     fn random_unit_vector() -> Self;
     fn random() -> Self;
+    fn random_range(range: &Range<f32>) -> Self;
     fn near_zero(&self) -> bool;
     fn random_in_hemisphere(&self) -> Self;
     fn refract_custom(&self, normal: Self, etai_over_etat: f32) -> Self;
@@ -16,8 +19,8 @@ impl Vec3Ext for Vec3 {
     fn random_in_unit_disk() -> Self {
         loop {
             let p = Self::new(
-                ThreadRng::random_range(-1.0..1.0),
-                ThreadRng::random_range(-1.0..1.0),
+                ThreadRng::random_range(&(-1.0..1.0)),
+                ThreadRng::random_range(&(-1.0..1.0)),
                 0.0,
             );
             if p.length_squared() < 1.0 {
@@ -36,10 +39,14 @@ impl Vec3Ext for Vec3 {
     }
 
     fn random() -> Self {
+        Self::random_range(&(0.0..1.0))
+    }
+
+    fn random_range(range: &Range<f32>) -> Self {
         Self::new(
-            ThreadRng::random_range(-1.0..1.0),
-            ThreadRng::random_range(-1.0..1.0),
-            ThreadRng::random_range(-1.0..1.0),
+            ThreadRng::random_range(range),
+            ThreadRng::random_range(range),
+            ThreadRng::random_range(range),
         )
     }
 

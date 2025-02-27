@@ -132,8 +132,8 @@ impl Camera {
     }
 
     fn sample_location(&self, x: usize, y: usize) -> Vec3 {
-        let rand_x = ThreadRng::random_range(-0.5..0.5);
-        let rand_y = ThreadRng::random_range(-0.5..0.5);
+        let rand_x = ThreadRng::random_range(&(-0.5..0.5));
+        let rand_y = ThreadRng::random_range(&(-0.5..0.5));
         self.pixel00_loc
             + (self.pixel_delta_u * (x as f32 + rand_x))
             + (self.pixel_delta_v * (y as f32 + rand_y))

@@ -42,7 +42,7 @@ impl ThreadRng {
         Self::next_u32() as f32 / u32::MAX as f32
     }
 
-    pub fn random_range(range: Range<f32>) -> f32 {
+    pub fn random_range(range: &Range<f32>) -> f32 {
         Self::random() * (range.end - range.start) + range.start
     }
 }
