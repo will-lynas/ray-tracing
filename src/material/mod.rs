@@ -14,7 +14,6 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Clone, Copy)]
 pub enum Material {
     Lambertian(Lambertian),
     Uniform(Uniform),

@@ -5,7 +5,6 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Clone, Copy)]
 pub struct Uniform {
     albedo: Color,
 }
