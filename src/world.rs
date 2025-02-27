@@ -8,14 +8,9 @@ use crate::{
         Hittable,
     },
     material::Material,
+    object::Object,
     timed_ray::TimedRay,
 };
-
-#[derive(Clone)]
-pub struct Object {
-    pub hittable: Hittable,
-    pub material: Material,
-}
 
 #[derive(Default, Clone)]
 pub struct World {
