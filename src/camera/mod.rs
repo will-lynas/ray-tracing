@@ -34,16 +34,13 @@ use crate::{
         WHITE,
     },
     extension_traits::Vec3Ext,
-    hittable::{
-        Hittable,
-        HittableList,
-    },
+    hittable::Hittable,
     rng::ThreadRng,
     timed_ray::TimedRay,
 };
 
 pub struct Camera {
-    world: HittableList,
+    world: Box<dyn Hittable>,
     width: usize,
     height: usize,
     camera_center: Vec3,

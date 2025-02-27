@@ -1,6 +1,7 @@
 use clap::Parser;
 use glam::Vec3A as Vec3;
 use ray_tracing::{
+    bvh_node::BvhNode,
     camera::Builder,
     color::Color,
     hittable::{
@@ -97,7 +98,9 @@ fn main() {
         Lambertian::new(Color::new(0.5, 0.0, 0.0)),
     )));
 
-    let mut builder = Builder::new(world)
+    let bvh = BvhNode::from_list(world);
+
+    let mut builder = Builder::new(bvh)
         .look_from(Vec3::new(-2.0, 2.0, 1.0))
         .look_at(big_sphere_start - Vec3::Y * big_sphere_radius)
         .vertical_fov(30.0);

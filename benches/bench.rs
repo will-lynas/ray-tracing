@@ -5,6 +5,7 @@ use criterion::{
 };
 use glam::Vec3A as Vec3;
 use ray_tracing::{
+    bvh_node::BvhNode,
     camera::{
         Builder,
         Camera,
@@ -29,7 +30,9 @@ fn gen_camera() -> Camera {
         0.5,
         Lambertian::new(Color::new(0.1, 0.2, 0.5)),
     )));
-    Builder::new(world)
+
+    let bvh = BvhNode::from_list(world);
+    Builder::new(bvh)
         .samples_per_pixel(10)
         .width(100)
         .quiet(true)

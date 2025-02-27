@@ -8,7 +8,7 @@
 #![allow(clippy::many_single_char_names)]
 
 mod aabb;
-mod bvh_node;
+pub mod bvh_node;
 pub mod camera;
 pub mod color;
 mod extension_traits;
