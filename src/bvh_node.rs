@@ -12,9 +12,13 @@ use crate::{
     timed_ray::TimedRay,
 };
 
+enum Children {
+    One(Hittable),
+    Two(Hittable, Hittable),
+}
+
 pub struct BvhNode {
-    left: Hittable,
-    right: Hittable,
+    children: Children,
     bounding_box: Aabb,
 }
 
@@ -32,16 +36,20 @@ impl BvhNode {
             return None;
         }
 
-        if let Some(hit_record) = self.left.hit(r, interval) {
-            let interval = interval.start..hit_record.t;
-            let hit_right = self.right.hit(r, &interval);
-            if let Some(hit_record) = hit_right {
-                Some(hit_record)
-            } else {
-                Some(hit_record)
+        match &self.children {
+            Children::One(hittable) => hittable.hit(r, interval),
+            Children::Two(left, right) => {
+                if let Some(left_hit_record) = left.hit(r, interval) {
+                    let interval = interval.start..left_hit_record.t;
+                    if let Some(right_hit_record) = right.hit(r, &interval) {
+                        Some(right_hit_record)
+                    } else {
+                        Some(left_hit_record)
+                    }
+                } else {
+                    None
+                }
             }
-        } else {
-            None
         }
     }
 }
