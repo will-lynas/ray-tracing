@@ -9,7 +9,7 @@ pub trait Vec3Ext {
     fn near_zero(&self) -> bool;
     fn random_in_hemisphere(&self) -> Self;
     fn refract_custom(&self, normal: Self, etai_over_etat: f32) -> Self;
-    fn axis(&self, axis: u8) -> f32;
+    fn axis(&self, axis: usize) -> f32;
 }
 
 impl Vec3Ext for Vec3 {
@@ -64,7 +64,7 @@ impl Vec3Ext for Vec3 {
         r_out_perp + r_out_parallel
     }
 
-    fn axis(&self, axis: u8) -> f32 {
+    fn axis(&self, axis: usize) -> f32 {
         match axis {
             0 => self.x,
             1 => self.y,

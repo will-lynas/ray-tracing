@@ -29,7 +29,7 @@ impl Aabb {
         }
     }
 
-    pub fn axis(&self, axis: u8) -> Range<f32> {
+    pub fn axis(&self, axis: usize) -> Range<f32> {
         match axis {
             0 => self.x.clone(),
             1 => self.y.clone(),
