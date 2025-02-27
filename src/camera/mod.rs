@@ -32,9 +32,9 @@ use crate::{
         LIGHT_BLUE,
         WHITE,
     },
+    extension_traits::Vec3Ext,
     rng::ThreadRng,
     timed_ray::TimedRay,
-    vec3_ext::Vec3Ext,
     world::World,
 };
 

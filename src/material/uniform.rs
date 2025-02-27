@@ -1,8 +1,8 @@
 use crate::{
     color::Color,
+    extension_traits::Vec3Ext,
     hittable::HitRecord,
     timed_ray::TimedRay,
-    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone, Copy)]

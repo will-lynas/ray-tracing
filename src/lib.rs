@@ -10,12 +10,11 @@
 mod aabb;
 pub mod camera;
 pub mod color;
+mod extension_traits;
 pub mod hittable;
 pub mod material;
 mod object;
-mod range_ext;
 mod ray;
 mod rng;
 mod timed_ray;
-mod vec3_ext;
 pub mod world;

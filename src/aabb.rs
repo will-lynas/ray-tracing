@@ -6,9 +6,11 @@ use std::{
 use glam::Vec3A as Vec3;
 
 use crate::{
-    range_ext::RangeExt,
+    extension_traits::{
+        RangeExt,
+        Vec3Ext,
+    },
     timed_ray::TimedRay,
-    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone)]

@@ -3,10 +3,10 @@ use crate::{
         Color,
         WHITE,
     },
+    extension_traits::Vec3Ext,
     hittable::HitRecord,
     rng::ThreadRng,
     timed_ray::TimedRay,
-    vec3_ext::Vec3Ext,
 };
 
 #[derive(Clone, Copy)]
