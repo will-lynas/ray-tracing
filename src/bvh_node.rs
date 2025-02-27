@@ -65,15 +65,19 @@ impl Hittable for BvhNode {
         match &self.children {
             Children::One(hittable) => hittable.hit(r, interval),
             Children::Two(left, right) => {
-                if let Some(left_hit_record) = left.hit(r, interval) {
-                    let interval = interval.start..left_hit_record.t;
-                    if let Some(right_hit_record) = right.hit(r, &interval) {
-                        Some(right_hit_record)
-                    } else {
-                        Some(left_hit_record)
+                let left_hit = left.hit(r, interval);
+                let right_hit = match &left_hit {
+                    Some(hit_record) => {
+                        let new_interval = interval.start..hit_record.t;
+                        right.hit(r, &new_interval)
                     }
+                    None => right.hit(r, interval),
+                };
+
+                if right_hit.is_some() {
+                    right_hit
                 } else {
-                    None
+                    left_hit
                 }
             }
         }
