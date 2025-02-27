@@ -85,7 +85,7 @@ impl Hittable for Sphere {
             t,
             front_face,
             in_ray: *r,
-            material: self.material,
+            material: &self.material,
         })
     }
 

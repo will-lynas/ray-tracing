@@ -12,16 +12,16 @@ mod sphere;
 pub use list::List as HittableList;
 pub use sphere::Sphere;
 
-pub struct HitRecord {
+pub struct HitRecord<'a> {
     pub point: Vec3,
     pub normal: Vec3,
     pub t: f32,
     pub front_face: bool,
     pub in_ray: TimedRay,
-    pub material: Material,
+    pub material: &'a Material,
 }
 
-impl HitRecord {
+impl HitRecord<'_> {
     pub fn front_face(normal: Vec3, r: &TimedRay) -> (bool, Vec3) {
         let front_face = normal.dot(r.direction) < 0.0;
         let normal = if front_face { normal } else { -normal };
