@@ -1,5 +1,6 @@
 use glam::Vec3A as Vec3;
 
+use super::Material;
 use crate::{
     color::Color,
     extension_traits::Vec3Ext,
@@ -15,8 +16,10 @@ impl Lambertian {
     pub fn new(albedo: Color) -> Self {
         Self { albedo }
     }
+}
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
+impl Material for Lambertian {
+    fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let mut scatter_direction = hit_record.normal + Vec3::random_unit_vector();
         if scatter_direction.near_zero() {
             scatter_direction = hit_record.normal;

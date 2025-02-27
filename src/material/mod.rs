@@ -14,44 +14,6 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-pub enum Material {
-    Lambertian(Lambertian),
-    Uniform(Uniform),
-    Metal(Metal),
-    Dielectric(Dielectric),
-}
-
-impl Material {
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
-        match self {
-            Material::Lambertian(lambertian) => lambertian.scatter(hit_record),
-            Material::Uniform(uniform) => uniform.scatter(hit_record),
-            Material::Metal(metal) => metal.scatter(hit_record),
-            Material::Dielectric(dielectric) => dielectric.scatter(hit_record),
-        }
-    }
-}
-
-impl From<Lambertian> for Material {
-    fn from(lambertian: Lambertian) -> Self {
-        Self::Lambertian(lambertian)
-    }
-}
-
-impl From<Uniform> for Material {
-    fn from(uniform: Uniform) -> Self {
-        Self::Uniform(uniform)
-    }
-}
-
-impl From<Metal> for Material {
-    fn from(metal: Metal) -> Self {
-        Self::Metal(metal)
-    }
-}
-
-impl From<Dielectric> for Material {
-    fn from(dielectric: Dielectric) -> Self {
-        Self::Dielectric(dielectric)
-    }
+pub trait Material: Sync {
+    fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)>;
 }

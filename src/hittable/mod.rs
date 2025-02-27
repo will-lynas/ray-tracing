@@ -18,7 +18,7 @@ pub struct HitRecord<'a> {
     pub t: f32,
     pub front_face: bool,
     pub in_ray: TimedRay,
-    pub material: &'a Material,
+    pub material: &'a dyn Material,
 }
 
 impl HitRecord<'_> {

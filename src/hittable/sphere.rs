@@ -14,12 +14,12 @@ use crate::{
 pub struct Sphere {
     center: Ray,
     radius: f32,
-    material: Material,
+    material: Box<dyn Material>,
     bounding_box: Aabb,
 }
 
 impl Sphere {
-    pub fn new(center: Ray, radius: f32, material: impl Into<Material>) -> Self {
+    pub fn new<M: Material + 'static>(center: Ray, radius: f32, material: M) -> Self {
         assert!(radius > 0.0);
         let box0 = Aabb::new(center.at(0.0) - radius, center.at(0.0) + radius);
         let box1 = Aabb::new(center.at(1.0) - radius, center.at(1.0) + radius);
@@ -27,21 +27,21 @@ impl Sphere {
         Self {
             center,
             radius,
-            material: material.into(),
+            material: Box::new(material),
             bounding_box,
         }
     }
 
-    pub fn new_static(center: Vec3, radius: f32, material: impl Into<Material>) -> Self {
+    pub fn new_static<M: Material + 'static>(center: Vec3, radius: f32, material: M) -> Self {
         let ray = Ray::new(center, Vec3::ZERO);
         Self::new(ray, radius, material)
     }
 
-    pub fn new_start_end(
+    pub fn new_start_end<M: Material + 'static>(
         start: Vec3,
         end: Vec3,
         radius: f32,
-        material: impl Into<Material>,
+        material: M,
     ) -> Self {
         let ray = Ray::new(start, end - start);
         Self::new(ray, radius, material)
@@ -84,7 +84,7 @@ impl Hittable for Sphere {
             t,
             front_face,
             in_ray: *r,
-            material: &self.material,
+            material: &*self.material,
         })
     }
 

@@ -1,5 +1,6 @@
 use glam::Vec3A as Vec3;
 
+use super::Material;
 use crate::{
     color::Color,
     extension_traits::Vec3Ext,
@@ -17,8 +18,10 @@ impl Metal {
         assert!((0.0..=1.0).contains(&fuzz));
         Self { albedo, fuzz }
     }
+}
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
+impl Material for Metal {
+    fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let mut reflected = hit_record.in_ray.direction.reflect(hit_record.normal);
         reflected = reflected.normalize() + Vec3::random_unit_vector() * self.fuzz;
         let scattered = TimedRay::new(hit_record.point, reflected, hit_record.in_ray.time);

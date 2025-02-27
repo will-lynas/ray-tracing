@@ -5,6 +5,7 @@ use crate::{
     },
     extension_traits::Vec3Ext,
     hittable::HitRecord,
+    material::Material,
     rng::ThreadRng,
     timed_ray::TimedRay,
 };
@@ -18,7 +19,16 @@ impl Dielectric {
         Self { refraction_index }
     }
 
-    pub fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
+    fn reflectance(cosine: f32, refraction_index: f32) -> f32 {
+        // Schlick's approximation for reflectance
+        let r0 = (1.0 - refraction_index) / (1.0 + refraction_index);
+        let r0_squared = r0 * r0;
+        r0_squared + (1.0 - r0_squared) * (1.0 - cosine).powi(5)
+    }
+}
+
+impl Material for Dielectric {
+    fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
         let refraction_index = if hit_record.front_face {
             1.0 / self.refraction_index
         } else {
@@ -40,12 +50,5 @@ impl Dielectric {
 
         let scattered = TimedRay::new(hit_record.point, direction, hit_record.in_ray.time);
         Some((scattered, WHITE))
-    }
-
-    fn reflectance(cosine: f32, refraction_index: f32) -> f32 {
-        // Schlick's approximation for reflectance
-        let r0 = (1.0 - refraction_index) / (1.0 + refraction_index);
-        let r0_squared = r0 * r0;
-        r0_squared + (1.0 - r0_squared) * (1.0 - cosine).powi(5)
     }
 }
