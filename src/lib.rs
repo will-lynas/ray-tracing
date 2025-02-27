@@ -7,6 +7,7 @@
 #![allow(clippy::return_self_not_must_use)]
 #![allow(clippy::many_single_char_names)]
 
+mod aabb;
 pub mod camera;
 pub mod color;
 pub mod hittable;

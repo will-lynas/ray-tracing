@@ -9,6 +9,7 @@ pub trait Vec3Ext {
     fn near_zero(&self) -> bool;
     fn random_in_hemisphere(&self) -> Self;
     fn refract_custom(&self, normal: Self, etai_over_etat: f32) -> Self;
+    fn axis(&self, axis: u8) -> f32;
 }
 
 impl Vec3Ext for Vec3 {
@@ -61,5 +62,14 @@ impl Vec3Ext for Vec3 {
         let r_out_perp = (*self + normal * cos_theta) * etai_over_etat;
         let r_out_parallel = normal * -(1.0 - r_out_perp.length_squared()).abs().sqrt();
         r_out_perp + r_out_parallel
+    }
+
+    fn axis(&self, axis: u8) -> f32 {
+        match axis {
+            0 => self.x,
+            1 => self.y,
+            2 => self.z,
+            _ => panic!("Invalid axis"),
+        }
     }
 }
