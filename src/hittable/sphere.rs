@@ -11,7 +11,6 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Clone)]
 pub struct Sphere {
     center: Ray,
     radius: f32,
