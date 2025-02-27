@@ -38,7 +38,8 @@ impl Aabb {
         }
     }
 
-    pub fn hit(&self, r: TimedRay, mut ray_t: Range<f32>) -> bool {
+    pub fn hit(&self, r: &TimedRay, ray_t: &Range<f32>) -> bool {
+        let mut ray_t = ray_t.clone();
         for i in 0..3 {
             let ax = self.axis(i);
             let d_inv = 1.0 / r.direction.axis(i);
