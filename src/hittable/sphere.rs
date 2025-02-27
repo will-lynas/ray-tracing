@@ -19,7 +19,7 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new<M: Material + 'static>(center: Ray, radius: f32, material: M) -> Self {
+    pub fn new(center: Ray, radius: f32, material: impl Material + 'static) -> Self {
         assert!(radius > 0.0);
         let box0 = Aabb::new(center.at(0.0) - radius, center.at(0.0) + radius);
         let box1 = Aabb::new(center.at(1.0) - radius, center.at(1.0) + radius);
@@ -32,16 +32,16 @@ impl Sphere {
         }
     }
 
-    pub fn new_static<M: Material + 'static>(center: Vec3, radius: f32, material: M) -> Self {
+    pub fn new_static(center: Vec3, radius: f32, material: impl Material + 'static) -> Self {
         let ray = Ray::new(center, Vec3::ZERO);
         Self::new(ray, radius, material)
     }
 
-    pub fn new_start_end<M: Material + 'static>(
+    pub fn new_start_end(
         start: Vec3,
         end: Vec3,
         radius: f32,
-        material: M,
+        material: impl Material + 'static,
     ) -> Self {
         let ray = Ray::new(start, end - start);
         Self::new(ray, radius, material)
