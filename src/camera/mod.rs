@@ -5,6 +5,7 @@ use std::{
         self,
         create_dir,
     },
+    ops::Range,
     time::{
         Instant,
         SystemTime,
@@ -33,7 +34,10 @@ use crate::{
         WHITE,
     },
     extension_traits::Vec3Ext,
-    hittable::HittableList,
+    hittable::{
+        Hittable,
+        HittableList,
+    },
     rng::ThreadRng,
     timed_ray::TimedRay,
 };
@@ -138,13 +142,18 @@ impl Camera {
             + (self.pixel_delta_v * (y as f32 + rand_y))
     }
 
+    pub fn bounce(&self, r: &TimedRay, interval: &Range<f32>) -> Option<(TimedRay, Color)> {
+        let hit_record = self.world.hit(r, interval)?;
+        hit_record.material.scatter(&hit_record)
+    }
+
     pub fn color(&self, r: &TimedRay, depth: usize) -> Color {
         if depth == 0 {
             return BLACK;
         }
 
         let interval = 0.001..f32::MAX;
-        if let Some((scattered, attenuation)) = self.world.bounce(r, &interval) {
+        if let Some((scattered, attenuation)) = self.bounce(r, &interval) {
             attenuation * self.color(&scattered, depth - 1)
         } else {
             Self::background(r)

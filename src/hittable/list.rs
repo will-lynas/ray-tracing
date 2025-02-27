@@ -2,7 +2,6 @@ use std::ops::Range;
 
 use crate::{
     aabb::Aabb,
-    color::Color,
     hittable::{
         HitRecord,
         Hittable,
@@ -13,10 +12,17 @@ use crate::{
 #[derive(Default)]
 pub struct List {
     pub objects: Vec<Box<dyn Hittable>>,
-    bounding_box: Option<Aabb>,
+    bounding_box: Aabb,
 }
 
 impl List {
+    pub fn add(&mut self, hittable: Box<dyn Hittable>) {
+        self.bounding_box = self.bounding_box.merge(&hittable.bounding_box());
+        self.objects.push(hittable);
+    }
+}
+
+impl Hittable for List {
     fn hit(&self, r: &TimedRay, interval: &Range<f32>) -> Option<HitRecord> {
         let mut output = None;
         let mut check_interval = interval.clone();
@@ -31,18 +37,7 @@ impl List {
         output
     }
 
-    pub fn bounce(&self, r: &TimedRay, interval: &Range<f32>) -> Option<(TimedRay, Color)> {
-        let hit_record = self.hit(r, interval)?;
-        hit_record.material.scatter(&hit_record)
-    }
-
-    pub fn add(&mut self, hittable: Box<dyn Hittable>) {
-        self.bounding_box = if let Some(bounding_box) = &self.bounding_box {
-            Some(bounding_box.merge(&hittable.bounding_box()))
-        } else {
-            Some(hittable.bounding_box())
-        };
-
-        self.objects.push(hittable);
+    fn bounding_box(&self) -> Aabb {
+        self.bounding_box.clone()
     }
 }

@@ -13,7 +13,7 @@ use crate::{
     timed_ray::TimedRay,
 };
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Aabb {
     x: Range<f32>,
     y: Range<f32>,
