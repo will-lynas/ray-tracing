@@ -14,7 +14,7 @@ use ray_tracing::{
         Lambertian,
         Metal,
     },
-    rng::ThreadRng,
+    rng::random_range,
 };
 
 #[derive(Parser)]
@@ -39,18 +39,18 @@ fn main() {
     for a in -11..11 {
         for b in -11..11 {
             let center = Vec3::new(
-                a as f32 + 0.9 * ThreadRng::random(),
+                a as f32 + 0.9 * fastrand::f32(),
                 0.2,
-                b as f32 + 0.9 * ThreadRng::random(),
+                b as f32 + 0.9 * fastrand::f32(),
             );
             if (center - Vec3::new(4.0, 0.2, 0.0)).length() <= 0.9 {
                 continue;
             }
 
             let radius = 0.2;
-            let choose_mat = ThreadRng::random();
-            let end = if ThreadRng::random() < 0.5 {
-                center + Vec3::Y * ThreadRng::random_range(&(0.0..0.5))
+            let choose_mat = fastrand::f32();
+            let end = if fastrand::f32() < 0.5 {
+                center + Vec3::Y * random_range(&(0.0..0.5))
             } else {
                 center
             };
@@ -60,7 +60,7 @@ fn main() {
                 world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             } else if choose_mat < 0.85 {
                 let albedo = Color(Vec3::random_range(&(0.5..1.0)));
-                let fuzz = ThreadRng::random_range(&(0.0..0.5));
+                let fuzz = random_range(&(0.0..0.5));
                 let sphere_material = Metal::new(albedo, fuzz);
                 world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             } else {

@@ -6,7 +6,6 @@ use crate::{
     extension_traits::Vec3Ext,
     hittable::HitRecord,
     material::Material,
-    rng::ThreadRng,
     timed_ray::TimedRay,
 };
 
@@ -41,13 +40,12 @@ impl Material for Dielectric {
         let sin_theta = (1.0 - cos_theta * cos_theta).sqrt();
 
         let cannot_refract = refraction_index * sin_theta > 1.0;
-        let direction = if cannot_refract
-            || Self::reflectance(cos_theta, refraction_index) > ThreadRng::random()
-        {
-            unit_direction.reflect(hit_record.normal)
-        } else {
-            unit_direction.refract_custom(hit_record.normal, refraction_index)
-        };
+        let direction =
+            if cannot_refract || Self::reflectance(cos_theta, refraction_index) > fastrand::f32() {
+                unit_direction.reflect(hit_record.normal)
+            } else {
+                unit_direction.refract_custom(hit_record.normal, refraction_index)
+            };
 
         let scattered = TimedRay::new(hit_record.point, direction, hit_record.in_ray.time);
         Some((scattered, WHITE))

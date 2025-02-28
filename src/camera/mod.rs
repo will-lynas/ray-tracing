@@ -35,7 +35,7 @@ use crate::{
     },
     extension_traits::Vec3Ext,
     hittable::Hittable,
-    rng::ThreadRng,
+    rng::random_range,
     timed_ray::TimedRay,
 };
 
@@ -93,7 +93,7 @@ impl Camera {
             .map(|_| {
                 let ray_origin = self.sample_ray_origin();
                 let ray_direction = self.sample_location(x, y) - ray_origin;
-                let ray_time = ThreadRng::random();
+                let ray_time = fastrand::f32();
                 let ray = TimedRay::new(ray_origin, ray_direction, ray_time);
                 self.color(&ray, self.max_depth)
             })
@@ -132,8 +132,8 @@ impl Camera {
     }
 
     fn sample_location(&self, x: usize, y: usize) -> Vec3 {
-        let rand_x = ThreadRng::random_range(&(-0.5..0.5));
-        let rand_y = ThreadRng::random_range(&(-0.5..0.5));
+        let rand_x = random_range(&(-0.5..0.5));
+        let rand_y = random_range(&(-0.5..0.5));
         self.pixel00_loc
             + (self.pixel_delta_u * (x as f32 + rand_x))
             + (self.pixel_delta_v * (y as f32 + rand_y))
