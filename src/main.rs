@@ -49,18 +49,23 @@ fn main() {
 
             let radius = 0.2;
             let choose_mat = ThreadRng::random();
+            let end = if ThreadRng::random() < 0.5 {
+                center + Vec3::Y * ThreadRng::random_range(&(0.0..0.5))
+            } else {
+                center
+            };
             if choose_mat < 0.70 {
                 let albedo = Color(Vec3::random()) * Color(Vec3::random());
                 let sphere_material = Lambertian::new(albedo);
-                world.add(Sphere::new_static(center, radius, sphere_material));
+                world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             } else if choose_mat < 0.85 {
                 let albedo = Color(Vec3::random_range(&(0.5..1.0)));
                 let fuzz = ThreadRng::random_range(&(0.0..0.5));
                 let sphere_material = Metal::new(albedo, fuzz);
-                world.add(Sphere::new_static(center, radius, sphere_material));
+                world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             } else {
                 let sphere_material = Dielectric::new(1.5);
-                world.add(Sphere::new_static(center, radius, sphere_material));
+                world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             };
         }
     }
@@ -68,7 +73,7 @@ fn main() {
     let material1 = Dielectric::new(1.5);
     world.add(Sphere::new_static(Vec3::new(0.0, 1.0, 0.0), 1.0, material1));
 
-    let material2 = Lambertian::new(Color::new(0.4, 0.2, 0.1));
+    let material2 = Lambertian::new(Color::new(0.0, 0.9, 0.2));
     world.add(Sphere::new_static(
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,
@@ -81,7 +86,7 @@ fn main() {
     let bvh = BvhNode::from_list(world);
 
     let mut builder = Builder::new(bvh)
-        .width(4000)
+        .width(2000)
         .samples_per_pixel(500)
         .max_depth(50)
         .vertical_fov(20.0)
