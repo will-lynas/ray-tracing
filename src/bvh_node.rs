@@ -44,12 +44,16 @@ impl BvhNode {
                 (Children::Two(child1, child2), bounding_box)
             }
             _ => {
-                let comparator = Aabb::random_axis_comparator();
+                let bounding_box = objects
+                    .iter()
+                    .map(|object| object.bounding_box())
+                    .reduce(|acc, aabb| acc.merge(&aabb))
+                    .unwrap();
+                let comparator = bounding_box.longest_axis_comparator();
                 objects.sort_by(comparator);
                 let mid = objects.len() / 2;
                 let left = Self::new(objects.drain(..mid).collect());
                 let right = Self::new(objects);
-                let bounding_box = left.bounding_box().merge(&right.bounding_box());
                 (Children::Two(Box::new(left), Box::new(right)), bounding_box)
             }
         };

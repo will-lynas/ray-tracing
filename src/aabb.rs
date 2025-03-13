@@ -5,6 +5,7 @@ use std::{
 };
 
 use glam::Vec3A as Vec3;
+use itertools::Itertools;
 
 use crate::{
     extension_traits::{
@@ -32,6 +33,7 @@ impl Aabb {
     }
 
     pub fn axis(&self, axis: usize) -> Range<f32> {
+        // TODO: use an enum instead of numbers
         match axis {
             0 => self.x.clone(),
             1 => self.y.clone(),
@@ -40,9 +42,32 @@ impl Aabb {
         }
     }
 
+    pub fn longest_axis(&self) -> usize {
+        [&self.x, &self.y, &self.z]
+            .iter()
+            .position_max_by(|a, b| {
+                let a_len = a.end - a.start;
+                let b_len = b.end - b.start;
+                a_len.partial_cmp(&b_len).unwrap()
+            })
+            .unwrap()
+    }
+
+    pub fn longest_axis_comparator(
+        &self,
+    ) -> impl FnMut(&Box<dyn Hittable>, &Box<dyn Hittable>) -> Ordering {
+        Self::axis_compator(self.longest_axis())
+    }
+
     pub fn random_axis_comparator() -> impl FnMut(&Box<dyn Hittable>, &Box<dyn Hittable>) -> Ordering
     {
         let axis = fastrand::u32(0..3) as usize;
+        Self::axis_compator(axis)
+    }
+
+    pub fn axis_compator(
+        axis: usize,
+    ) -> impl FnMut(&Box<dyn Hittable>, &Box<dyn Hittable>) -> Ordering {
         move |a, b| {
             let a_box = a.bounding_box();
             let b_box = b.bounding_box();
