@@ -1,11 +1,11 @@
 use clap::Parser;
 use glam::Vec3A as Vec3;
 use ray_tracing::{
-    bvh_node::BvhNode,
     camera::Builder,
     color::Color,
     extension_traits::Vec3Ext,
     hittable::{
+        BvhNode,
         HittableList,
         Sphere,
     },

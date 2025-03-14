@@ -13,11 +13,12 @@ use crate::{
     material::Material,
     timed_ray::TimedRay,
 };
+mod bvh_node;
 mod list;
 mod sphere;
+pub use bvh_node::BvhNode;
 pub use list::List as HittableList;
 pub use sphere::Sphere;
-
 pub struct HitRecord<'a> {
     pub point: Vec3,
     pub uv: Vec2,

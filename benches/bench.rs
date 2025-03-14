@@ -5,13 +5,13 @@ use criterion::{
 };
 use glam::Vec3A as Vec3;
 use ray_tracing::{
-    bvh_node::BvhNode,
     camera::{
         Builder,
         Camera,
     },
     color::Color,
     hittable::{
+        BvhNode,
         HittableList,
         Sphere,
     },
