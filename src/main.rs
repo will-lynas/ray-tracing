@@ -57,23 +57,18 @@ fn main() {
 
             let radius = 0.2;
             let choose_mat = fastrand::f32();
-            let end = if fastrand::f32() < 0.5 {
-                center + Vec3::Y * random_range(&(0.0..0.5))
-            } else {
-                center
-            };
             if choose_mat < 0.70 {
                 let albedo = Color(Vec3::random()) * Color(Vec3::random());
                 let sphere_material = Lambertian::new(SolidColor::new_from_color(albedo));
-                world.add(Sphere::new_start_end(center, end, radius, sphere_material));
+                world.add(Sphere::new_static(center, radius, sphere_material));
             } else if choose_mat < 0.85 {
                 let albedo = Color(Vec3::random_range(&(0.5..1.0)));
                 let fuzz = random_range(&(0.0..0.5));
                 let sphere_material = Metal::new(albedo, fuzz);
-                world.add(Sphere::new_start_end(center, end, radius, sphere_material));
+                world.add(Sphere::new_static(center, radius, sphere_material));
             } else {
                 let sphere_material = Dielectric::new(1.5);
-                world.add(Sphere::new_start_end(center, end, radius, sphere_material));
+                world.add(Sphere::new_static(center, radius, sphere_material));
             };
         }
     }
