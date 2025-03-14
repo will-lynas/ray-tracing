@@ -164,3 +164,42 @@ pub fn many_bouncing_spheres() -> Builder {
         .defocus_angle(0.6)
         .focus_dist(10.0)
 }
+
+pub fn checkered_spheres() -> Builder {
+    let mut world = HittableList::default();
+    // TODO: we should hold references to textures, instead of duplicating them
+    // (Can't even do Clone, because of the dyn)
+    let checker = CheckerTexture::new(
+        SolidColor::new(0.1, 0.01, 0.4),
+        SolidColor::new(0.9, 0.9, 0.9),
+        0.3,
+    );
+    world.add(Sphere::new_static(
+        Vec3::new(0.0, -10.0, 0.0),
+        10.0,
+        Lambertian::new(checker),
+    ));
+    let checker = CheckerTexture::new(
+        SolidColor::new(0.1, 0.01, 0.4),
+        SolidColor::new(0.9, 0.9, 0.9),
+        0.3,
+    );
+    world.add(Sphere::new_static(
+        Vec3::new(0.0, 10.0, 0.0),
+        10.0,
+        Lambertian::new(checker),
+    ));
+
+    let bvh = BvhNode::from_list(world);
+
+    Builder::new(bvh)
+        .width(2000)
+        .samples_per_pixel(500)
+        .max_depth(50)
+        .vertical_fov(20.0)
+        .look_from(Vec3::new(13.0, 2.0, 3.0))
+        .look_at(Vec3::new(0.0, 0.0, 0.0))
+        .vup(Vec3::Y)
+        .defocus_angle(0.0)
+        .focus_dist(10.0)
+}

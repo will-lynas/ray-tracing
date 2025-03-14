@@ -4,11 +4,13 @@ use clap::{
 };
 mod scenes;
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Parser, ValueEnum, Clone, Default)]
 enum Scene {
     #[default]
     ManySpheres,
     ManyBouncingSpheres,
+    CheckerSpheres,
 }
 
 #[derive(Parser)]
@@ -26,6 +28,7 @@ fn main() {
     let mut builder = match args.scene {
         Scene::ManySpheres => scenes::many_spheres(),
         Scene::ManyBouncingSpheres => scenes::many_bouncing_spheres(),
+        Scene::CheckerSpheres => scenes::checkered_spheres(),
     };
     if args.draft {
         builder = builder.draft();
