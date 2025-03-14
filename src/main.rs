@@ -15,6 +15,10 @@ use ray_tracing::{
         Metal,
     },
     rng::random_range,
+    texture::{
+        CheckerTexture,
+        SolidColor,
+    },
 };
 
 #[derive(Parser)]
@@ -29,7 +33,11 @@ fn main() {
 
     let mut world = HittableList::default();
 
-    let ground_material = Lambertian::new(Color::new(0.5, 0.5, 0.5));
+    let ground_material = Lambertian::new(CheckerTexture::new(
+        SolidColor::new(0.1, 0.01, 0.4),
+        SolidColor::new(0.9, 0.9, 0.9),
+        0.3,
+    ));
     world.add(Sphere::new_static(
         Vec3::new(0.0, -1000.0, 0.0),
         1000.0,
@@ -56,7 +64,7 @@ fn main() {
             };
             if choose_mat < 0.70 {
                 let albedo = Color(Vec3::random()) * Color(Vec3::random());
-                let sphere_material = Lambertian::new(albedo);
+                let sphere_material = Lambertian::new(SolidColor::new_from_color(albedo));
                 world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             } else if choose_mat < 0.85 {
                 let albedo = Color(Vec3::random_range(&(0.5..1.0)));
@@ -73,7 +81,7 @@ fn main() {
     let material1 = Dielectric::new(1.5);
     world.add(Sphere::new_static(Vec3::new(0.0, 1.0, 0.0), 1.0, material1));
 
-    let material2 = Lambertian::new(Color::new(0.0, 0.9, 0.2));
+    let material2 = Lambertian::new(SolidColor::new(0.0, 0.9, 0.2));
     world.add(Sphere::new_static(
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,

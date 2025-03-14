@@ -5,17 +5,20 @@ use crate::{
     color::Color,
     extension_traits::Vec3Ext,
     hittable::HitRecord,
+    texture::Texture,
     timed_ray::TimedRay,
 };
 
 #[derive(Debug)]
 pub struct Lambertian {
-    albedo: Color,
+    texture: Box<dyn Texture>,
 }
 
 impl Lambertian {
-    pub fn new(albedo: Color) -> Self {
-        Self { albedo }
+    pub fn new(texture: impl Texture + 'static) -> Self {
+        Self {
+            texture: Box::new(texture),
+        }
     }
 }
 
@@ -26,6 +29,7 @@ impl Material for Lambertian {
             scatter_direction = hit_record.normal;
         }
         let scattered = TimedRay::new(hit_record.point, scatter_direction, hit_record.in_ray.time);
-        Some((scattered, self.albedo))
+        let attenuation = self.texture.value(hit_record.uv, hit_record.point);
+        Some((scattered, attenuation))
     }
 }

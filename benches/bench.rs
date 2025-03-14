@@ -9,13 +9,13 @@ use ray_tracing::{
         Builder,
         Camera,
     },
-    color::Color,
     hittable::{
         BvhNode,
         HittableList,
         Sphere,
     },
     material::Lambertian,
+    texture::SolidColor,
 };
 
 fn gen_camera() -> Camera {
@@ -23,12 +23,12 @@ fn gen_camera() -> Camera {
     world.add(Sphere::new_static(
         Vec3::new(0.0, -100.5, -1.0),
         100.0,
-        Lambertian::new(Color::new(0.48, 0.73, 0.2)),
+        Lambertian::new(SolidColor::new(0.48, 0.73, 0.2)),
     ));
     world.add(Sphere::new_static(
         Vec3::new(0.0, 0.0, -1.2),
         0.5,
-        Lambertian::new(Color::new(0.1, 0.2, 0.5)),
+        Lambertian::new(SolidColor::new(0.1, 0.2, 0.5)),
     ));
 
     let bvh = BvhNode::from_list(world);
