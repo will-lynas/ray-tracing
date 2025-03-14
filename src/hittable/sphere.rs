@@ -1,6 +1,9 @@
 use std::ops::Range;
 
-use glam::Vec3A as Vec3;
+use glam::{
+    Vec2,
+    Vec3A as Vec3,
+};
 
 use super::Hittable;
 use crate::{
@@ -82,6 +85,7 @@ impl Hittable for Sphere {
         Some(HitRecord {
             point,
             normal,
+            uv: Vec2::ZERO,
             t,
             front_face,
             in_ray: *r,

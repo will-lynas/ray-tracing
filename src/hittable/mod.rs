@@ -3,7 +3,10 @@ use std::{
     ops::Range,
 };
 
-use glam::Vec3A as Vec3;
+use glam::{
+    Vec2,
+    Vec3A as Vec3,
+};
 
 use crate::{
     aabb::Aabb,
@@ -17,6 +20,7 @@ pub use sphere::Sphere;
 
 pub struct HitRecord<'a> {
     pub point: Vec3,
+    pub uv: Vec2,
     pub normal: Vec3,
     pub t: f32,
     pub front_face: bool,
