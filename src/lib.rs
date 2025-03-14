@@ -15,4 +15,5 @@ pub mod hittable;
 pub mod material;
 mod ray;
 pub mod rng;
+pub mod texture;
 mod timed_ray;
