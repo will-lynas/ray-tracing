@@ -30,7 +30,7 @@ pub fn many_spheres() -> Builder {
     let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
-        0.3,
+        100.0,
     ));
 
     let ground_material = Lambertian::new(checker_texture);
@@ -105,7 +105,7 @@ pub fn many_bouncing_spheres() -> Builder {
     let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
-        0.3,
+        100.0,
     ));
 
     let ground_material = Lambertian::new(checker_texture);
