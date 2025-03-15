@@ -103,7 +103,6 @@ impl ImageTexture {
         let path = path.into();
         let image = image::open(path).unwrap();
         let rgb = image.to_rgb8();
-        println!("width: {}, height: {}", rgb.width(), rgb.height());
         Self { image: rgb }
     }
 }
