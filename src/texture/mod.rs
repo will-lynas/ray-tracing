@@ -109,8 +109,9 @@ impl ImageTexture {
 
 impl Texture for ImageTexture {
     fn value(&self, uv: Vec2, _point: Vec3) -> Color {
-        let u = (uv.x * self.image.width() as f32) as u32;
-        let v = ((1.0 - uv.y) * self.image.height() as f32) as u32;
+        let u = ((uv.x * self.image.width() as f32) as u32).clamp(0, self.image.width() - 1);
+        let v =
+            (((1.0 - uv.y) * self.image.height() as f32) as u32).clamp(0, self.image.height() - 1);
         self.image.get_pixel(u, v).into()
     }
 }
