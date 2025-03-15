@@ -172,7 +172,7 @@ pub fn checkered_spheres() -> Builder {
     let checker = CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
-        0.3,
+        100.0,
     );
     world.add(Sphere::new_static(
         Vec3::new(0.0, -10.0, 0.0),
@@ -182,7 +182,7 @@ pub fn checkered_spheres() -> Builder {
     let checker = CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
-        0.3,
+        100.0,
     );
     world.add(Sphere::new_static(
         Vec3::new(0.0, 10.0, 0.0),
