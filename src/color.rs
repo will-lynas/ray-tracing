@@ -20,7 +20,7 @@ impl Color {
         Self(Vec3::new(r, g, b))
     }
 
-    const fn new_u8(r: u8, g: u8, b: u8) -> Self {
+    pub const fn new_u8(r: u8, g: u8, b: u8) -> Self {
         Self::new(r as f32 / 255.0, g as f32 / 255.0, b as f32 / 255.0)
     }
 
@@ -54,5 +54,11 @@ impl Mul<Color> for Color {
 
     fn mul(self, rhs: Color) -> Self::Output {
         Color(self.0 * rhs.0)
+    }
+}
+
+impl From<&image::Rgb<u8>> for Color {
+    fn from(rgb: &image::Rgb<u8>) -> Self {
+        Self::new_u8(rgb.0[0], rgb.0[1], rgb.0[2])
     }
 }

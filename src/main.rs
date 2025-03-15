@@ -11,6 +11,7 @@ enum Scene {
     ManySpheres,
     ManyBouncingSpheres,
     CheckerSpheres,
+    Globe,
 }
 
 #[derive(Parser)]
@@ -29,6 +30,7 @@ fn main() {
         Scene::ManySpheres => scenes::many_spheres(),
         Scene::ManyBouncingSpheres => scenes::many_bouncing_spheres(),
         Scene::CheckerSpheres => scenes::checkered_spheres(),
+        Scene::Globe => scenes::world(),
     };
     if args.draft {
         builder = builder.draft();

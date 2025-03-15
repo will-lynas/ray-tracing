@@ -1,4 +1,7 @@
-use std::fmt::Debug;
+use std::{
+    fmt::Debug,
+    path::PathBuf,
+};
 
 use glam::{
     Vec2,
@@ -87,5 +90,28 @@ impl Texture for CheckerTexture {
         } else {
             self.odd.value(uv, point)
         }
+    }
+}
+
+#[derive(Debug)]
+pub struct ImageTexture {
+    image: image::RgbImage,
+}
+
+impl ImageTexture {
+    pub fn new(path: impl Into<PathBuf>) -> Self {
+        let path = path.into();
+        let image = image::open(path).unwrap();
+        let rgb = image.to_rgb8();
+        println!("width: {}, height: {}", rgb.width(), rgb.height());
+        Self { image: rgb }
+    }
+}
+
+impl Texture for ImageTexture {
+    fn value(&self, uv: Vec2, _point: Vec3) -> Color {
+        let u = (uv.x * self.image.width() as f32) as u32;
+        let v = ((1.0 - uv.y) * self.image.height() as f32) as u32;
+        self.image.get_pixel(u, v).into()
     }
 }

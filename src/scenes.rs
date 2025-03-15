@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use glam::Vec3A as Vec3;
 use ray_tracing::{
     camera::{
@@ -19,6 +21,7 @@ use ray_tracing::{
     rng::random_range,
     texture::{
         CheckerTexture,
+        ImageTexture,
         SolidColor,
     },
 };
@@ -212,4 +215,28 @@ pub fn checkered_spheres() -> Builder {
         .vup(Vec3::Y)
         .defocus_angle(0.0)
         .focus_dist(10.0)
+}
+
+pub fn world() -> Builder {
+    let mut world = HittableList::default();
+    let mut stores = Stores::default();
+
+    let earth_texture = stores
+        .textures
+        .add(ImageTexture::new(Path::new("image-textures/earthmap.jpg")));
+    let earth_material = Lambertian::new(earth_texture);
+    world.add(Sphere::new_static(
+        Vec3::new(0.0, 0.0, 0.0),
+        2.0,
+        earth_material,
+    ));
+
+    let bvh = BvhNode::from_list(world);
+
+    Builder::new(bvh, stores)
+        .vertical_fov(20.0)
+        .look_from(Vec3::new(0.0, 0.0, 12.0))
+        .look_at(Vec3::ZERO)
+        .vup(Vec3::Y)
+        .defocus_angle(0.0)
 }
