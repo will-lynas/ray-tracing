@@ -1,6 +1,9 @@
 use glam::Vec3A as Vec3;
 use ray_tracing::{
-    camera::Builder,
+    camera::{
+        Builder,
+        Stores,
+    },
     color::Color,
     extension_traits::Vec3Ext,
     hittable::{
@@ -22,12 +25,15 @@ use ray_tracing::{
 
 pub fn many_spheres() -> Builder {
     let mut world = HittableList::default();
+    let mut stores = Stores::default();
 
-    let ground_material = Lambertian::new(CheckerTexture::new(
+    let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
         0.3,
     ));
+
+    let ground_material = Lambertian::new(checker_texture);
     world.add(Sphere::new_static(
         Vec3::new(0.0, -1000.0, 0.0),
         1000.0,
@@ -49,7 +55,8 @@ pub fn many_spheres() -> Builder {
             let choose_mat = fastrand::f32();
             if choose_mat < 0.50 {
                 let albedo = Color(Vec3::random()) * Color(Vec3::random());
-                let sphere_material = Lambertian::new(SolidColor::new_from_color(albedo));
+                let texture = stores.textures.add(SolidColor::new_from_color(albedo));
+                let sphere_material = Lambertian::new(texture);
                 world.add(Sphere::new_static(center, radius, sphere_material));
             } else if choose_mat < 0.70 {
                 let albedo = Color(Vec3::random_range(&(0.5..1.0)));
@@ -66,7 +73,8 @@ pub fn many_spheres() -> Builder {
     let material1 = Dielectric::new(1.5);
     world.add(Sphere::new_static(Vec3::new(0.0, 1.0, 0.0), 1.0, material1));
 
-    let material2 = Lambertian::new(SolidColor::new(0.0, 0.9, 0.2));
+    let texture = stores.textures.add(SolidColor::new(0.0, 0.9, 0.2));
+    let material2 = Lambertian::new(texture);
     world.add(Sphere::new_static(
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,
@@ -78,7 +86,7 @@ pub fn many_spheres() -> Builder {
 
     let bvh = BvhNode::from_list(world);
 
-    Builder::new(bvh)
+    Builder::new(bvh, stores)
         .width(2000)
         .samples_per_pixel(500)
         .max_depth(50)
@@ -92,12 +100,15 @@ pub fn many_spheres() -> Builder {
 
 pub fn many_bouncing_spheres() -> Builder {
     let mut world = HittableList::default();
+    let mut stores = Stores::default();
 
-    let ground_material = Lambertian::new(CheckerTexture::new(
+    let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
         0.3,
     ));
+
+    let ground_material = Lambertian::new(checker_texture);
     world.add(Sphere::new_static(
         Vec3::new(0.0, -1000.0, 0.0),
         1000.0,
@@ -124,7 +135,8 @@ pub fn many_bouncing_spheres() -> Builder {
             let choose_mat = fastrand::f32();
             if choose_mat < 0.50 {
                 let albedo = Color(Vec3::random()) * Color(Vec3::random());
-                let sphere_material = Lambertian::new(SolidColor::new_from_color(albedo));
+                let texture = stores.textures.add(SolidColor::new_from_color(albedo));
+                let sphere_material = Lambertian::new(texture);
                 world.add(Sphere::new_start_end(center, end, radius, sphere_material));
             } else if choose_mat < 0.70 {
                 let albedo = Color(Vec3::random_range(&(0.5..1.0)));
@@ -141,7 +153,8 @@ pub fn many_bouncing_spheres() -> Builder {
     let material1 = Dielectric::new(1.5);
     world.add(Sphere::new_static(Vec3::new(0.0, 1.0, 0.0), 1.0, material1));
 
-    let material2 = Lambertian::new(SolidColor::new(0.0, 0.9, 0.2));
+    let texture = stores.textures.add(SolidColor::new(0.0, 0.9, 0.2));
+    let material2 = Lambertian::new(texture);
     world.add(Sphere::new_static(
         Vec3::new(-4.0, 1.0, 0.0),
         1.0,
@@ -153,7 +166,7 @@ pub fn many_bouncing_spheres() -> Builder {
 
     let bvh = BvhNode::from_list(world);
 
-    Builder::new(bvh)
+    Builder::new(bvh, stores)
         .width(2000)
         .samples_per_pixel(500)
         .max_depth(50)
@@ -167,32 +180,29 @@ pub fn many_bouncing_spheres() -> Builder {
 
 pub fn checkered_spheres() -> Builder {
     let mut world = HittableList::default();
-    // TODO: we should hold references to textures, instead of duplicating them
-    // (Can't even do Clone, because of the dyn)
-    let checker = CheckerTexture::new(
+    let mut stores = Stores::default();
+
+    let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
         100.0,
-    );
+    ));
+
     world.add(Sphere::new_static(
         Vec3::new(0.0, -10.0, 0.0),
         10.0,
-        Lambertian::new(checker),
+        Lambertian::new(checker_texture),
     ));
-    let checker = CheckerTexture::new(
-        SolidColor::new(0.1, 0.01, 0.4),
-        SolidColor::new(0.9, 0.9, 0.9),
-        100.0,
-    );
+
     world.add(Sphere::new_static(
         Vec3::new(0.0, 10.0, 0.0),
         10.0,
-        Lambertian::new(checker),
+        Lambertian::new(checker_texture),
     ));
 
     let bvh = BvhNode::from_list(world);
 
-    Builder::new(bvh)
+    Builder::new(bvh, stores)
         .width(2000)
         .samples_per_pixel(500)
         .max_depth(50)

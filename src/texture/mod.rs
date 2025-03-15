@@ -11,6 +11,24 @@ pub trait Texture: Sync + Debug {
     fn value(&self, uv: Vec2, point: Vec3) -> Color;
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct TextureHandle(usize);
+
+#[derive(Default)]
+pub struct TextureStore(Vec<Box<dyn Texture>>);
+
+impl TextureStore {
+    pub fn add(&mut self, texture: impl Texture + 'static) -> TextureHandle {
+        let handle = self.0.len();
+        self.0.push(Box::new(texture));
+        TextureHandle(handle)
+    }
+
+    pub fn get(&self, handle: TextureHandle) -> &dyn Texture {
+        self.0[handle.0].as_ref()
+    }
+}
+
 #[derive(Debug)]
 pub struct SolidColor {
     pub albedo: Color,

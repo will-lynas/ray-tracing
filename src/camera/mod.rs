@@ -36,11 +36,18 @@ use crate::{
     extension_traits::Vec3Ext,
     hittable::Hittable,
     rng::random_range,
+    texture::TextureStore,
     timed_ray::TimedRay,
 };
 
+#[derive(Default)]
+pub struct Stores {
+    pub textures: TextureStore,
+}
+
 pub struct Camera {
     world: Box<dyn Hittable>,
+    stores: Stores,
     width: usize,
     height: usize,
     camera_center: Vec3,
@@ -141,7 +148,7 @@ impl Camera {
 
     pub fn bounce(&self, r: &TimedRay, interval: &Range<f32>) -> Option<(TimedRay, Color)> {
         let hit_record = self.world.hit(r, interval)?;
-        hit_record.material.scatter(&hit_record)
+        hit_record.material.scatter(&hit_record, &self.stores)
     }
 
     pub fn color(&self, r: &TimedRay, depth: usize) -> Color {

@@ -11,11 +11,13 @@ pub use metal::Metal;
 pub use uniform::Uniform;
 
 use crate::{
+    camera::Stores,
     color::Color,
     hittable::HitRecord,
     timed_ray::TimedRay,
 };
 
 pub trait Material: Sync + Debug {
-    fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)>;
+    // TODO: Passing in stores is pretty bad, but it works for now
+    fn scatter(&self, hit_record: &HitRecord, stores: &Stores) -> Option<(TimedRay, Color)>;
 }

@@ -8,6 +8,7 @@ use ray_tracing::{
     camera::{
         Builder,
         Camera,
+        Stores,
     },
     hittable::{
         BvhNode,
@@ -20,19 +21,24 @@ use ray_tracing::{
 
 fn gen_camera() -> Camera {
     let mut world = HittableList::default();
+    let mut stores = Stores::default();
+
+    let texture = stores.textures.add(SolidColor::new(0.48, 0.73, 0.2));
     world.add(Sphere::new_static(
         Vec3::new(0.0, -100.5, -1.0),
         100.0,
-        Lambertian::new(SolidColor::new(0.48, 0.73, 0.2)),
+        Lambertian::new(texture),
     ));
+
+    let texture = stores.textures.add(SolidColor::new(0.1, 0.2, 0.5));
     world.add(Sphere::new_static(
         Vec3::new(0.0, 0.0, -1.2),
         0.5,
-        Lambertian::new(SolidColor::new(0.1, 0.2, 0.5)),
+        Lambertian::new(texture),
     ));
 
     let bvh = BvhNode::from_list(world);
-    Builder::new(bvh)
+    Builder::new(bvh, stores)
         .samples_per_pixel(10)
         .width(100)
         .quiet(true)

@@ -2,11 +2,15 @@ use std::f32::consts::PI;
 
 use glam::Vec3A as Vec3;
 
-use super::Camera;
+use super::{
+    Camera,
+    Stores,
+};
 use crate::hittable::Hittable;
 
 pub struct Builder {
     world: Box<dyn Hittable>,
+    stores: Stores,
     width: usize,
     aspect_ratio: f32,
     samples_per_pixel: usize,
@@ -21,9 +25,10 @@ pub struct Builder {
 }
 
 impl Builder {
-    pub fn new(world: impl Hittable + 'static) -> Self {
+    pub fn new(world: impl Hittable + 'static, stores: Stores) -> Self {
         Self {
             world: Box::new(world),
+            stores,
             width: 2000,
             aspect_ratio: 16.0 / 9.0,
             samples_per_pixel: 400,
@@ -132,6 +137,7 @@ impl Builder {
 
         Camera {
             world: self.world,
+            stores: self.stores,
             width: self.width,
             height,
             camera_center,

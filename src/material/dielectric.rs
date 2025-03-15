@@ -1,4 +1,5 @@
 use crate::{
+    camera::Stores,
     color::{
         Color,
         WHITE,
@@ -28,7 +29,7 @@ impl Dielectric {
 }
 
 impl Material for Dielectric {
-    fn scatter(&self, hit_record: &HitRecord) -> Option<(TimedRay, Color)> {
+    fn scatter(&self, hit_record: &HitRecord, _stores: &Stores) -> Option<(TimedRay, Color)> {
         let refraction_index = if hit_record.front_face {
             1.0 / self.refraction_index
         } else {
