@@ -86,8 +86,8 @@ impl Hittable for Sphere {
         let outward_normal = (point - center) / self.radius;
         let (front_face, normal) = HitRecord::front_face(outward_normal, r);
 
-        let phi = (-point.z).atan2(point.x);
-        let theta = (-point.y).acos();
+        let phi = (-outward_normal.z).atan2(outward_normal.x);
+        let theta = (-outward_normal.y).acos();
         let u = phi / (2.0 * PI);
         let v = theta / PI;
 
