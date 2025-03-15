@@ -1,4 +1,7 @@
-use std::ops::Range;
+use std::{
+    f32::consts::PI,
+    ops::Range,
+};
 
 use glam::{
     Vec2,
@@ -82,10 +85,16 @@ impl Hittable for Sphere {
         let point = r.at(t);
         let outward_normal = (point - center) / self.radius;
         let (front_face, normal) = HitRecord::front_face(outward_normal, r);
+
+        let phi = (-point.z).atan2(point.x);
+        let theta = (-point.y).acos();
+        let u = phi / (2.0 * PI);
+        let v = theta / PI;
+
         Some(HitRecord {
             point,
             normal,
-            uv: Vec2::ZERO,
+            uv: Vec2::new(u, v),
             t,
             front_face,
             in_ray: *r,
