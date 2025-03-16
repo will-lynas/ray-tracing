@@ -20,6 +20,7 @@ use ray_tracing::{
     },
     rng::random_range,
     texture::{
+        CheckerTexture,
         ImageTexture,
         SolidColor,
         SurfaceCheckerTexture,
@@ -30,10 +31,10 @@ pub fn many_spheres() -> Builder {
     let mut world = HittableList::default();
     let mut stores = Stores::default();
 
-    let checker_texture = stores.textures.add(SurfaceCheckerTexture::new(
+    let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
-        100.0,
+        0.5,
     ));
 
     let ground_material = Lambertian::new(checker_texture);
@@ -105,10 +106,10 @@ pub fn many_bouncing_spheres() -> Builder {
     let mut world = HittableList::default();
     let mut stores = Stores::default();
 
-    let checker_texture = stores.textures.add(SurfaceCheckerTexture::new(
+    let checker_texture = stores.textures.add(CheckerTexture::new(
         SolidColor::new(0.1, 0.01, 0.4),
         SolidColor::new(0.9, 0.9, 0.9),
-        100.0,
+        0.5,
     ));
 
     let ground_material = Lambertian::new(checker_texture);

@@ -56,6 +56,45 @@ impl Texture for SolidColor {
 }
 
 #[derive(Debug)]
+pub struct CheckerTexture {
+    odd: Box<dyn Texture>,
+    even: Box<dyn Texture>,
+    inv_scale: f32,
+}
+
+impl CheckerTexture {
+    pub fn new(odd: impl Texture + 'static, even: impl Texture + 'static, scale: f32) -> Self {
+        Self {
+            odd: Box::new(odd),
+            even: Box::new(even),
+            inv_scale: 1.0 / scale,
+        }
+    }
+
+    pub fn new_from_color(odd: Color, even: Color, scale: f32) -> Self {
+        Self::new(
+            SolidColor::new_from_color(odd),
+            SolidColor::new_from_color(even),
+            scale,
+        )
+    }
+}
+
+impl Texture for CheckerTexture {
+    fn value(&self, uv: Vec2, point: Vec3) -> Color {
+        let x = (point.x * self.inv_scale).floor() as i32;
+        let y = (point.y * self.inv_scale).floor() as i32;
+        let z = (point.z * self.inv_scale).floor() as i32;
+
+        if (x + y + z) % 2 == 0 {
+            self.even.value(uv, point)
+        } else {
+            self.odd.value(uv, point)
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct SurfaceCheckerTexture {
     odd: Box<dyn Texture>,
     even: Box<dyn Texture>,
