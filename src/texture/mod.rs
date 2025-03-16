@@ -56,13 +56,13 @@ impl Texture for SolidColor {
 }
 
 #[derive(Debug)]
-pub struct CheckerTexture {
+pub struct SurfaceCheckerTexture {
     odd: Box<dyn Texture>,
     even: Box<dyn Texture>,
     squares: f32,
 }
 
-impl CheckerTexture {
+impl SurfaceCheckerTexture {
     pub fn new(odd: impl Texture + 'static, even: impl Texture + 'static, squares: f32) -> Self {
         Self {
             odd: Box::new(odd),
@@ -80,7 +80,7 @@ impl CheckerTexture {
     }
 }
 
-impl Texture for CheckerTexture {
+impl Texture for SurfaceCheckerTexture {
     fn value(&self, uv: Vec2, point: Vec3) -> Color {
         let u = (uv.x * self.squares).floor() as i32;
         let v = (uv.y * self.squares).floor() as i32;
